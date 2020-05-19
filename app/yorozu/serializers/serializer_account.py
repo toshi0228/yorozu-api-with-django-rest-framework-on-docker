@@ -11,10 +11,10 @@ class AccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        # fields = "__all__"
-        fielfs = ('email', 'password' "yorozu_id")
-        exclude = ("uuid", 'first_name', 'last_name', "username",
-                   "is_active", "is_staff", "last_login")
+        fields = "__all__"
+        # fielfs = ('email', 'password' "yorozu_id")
+        # exclude = ("uuid", 'first_name', 'last_name', "username",
+        #            "is_active", "is_staff", "last_login")
 
         # 開発中はextra_kwargsをoffにしておく
         # extra_kwargs = {
@@ -55,7 +55,7 @@ class AccountSerializer(serializers.ModelSerializer):
         User = get_user_model()
 
         # instance.idにはそれぞれのアカウントIDがあり、それを使い指定のuserを呼び出す
-        user = User.objects.get(id=instance.id)
+        user = User.objects.get(uuid=instance.uuid)
 
         # userとprfileは一対一リレーションを組んでいるので,yorozu_idを取り出せる
         # アカウントを作成したばかりの人は、profileがない場合もあるので,try,except

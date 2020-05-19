@@ -63,7 +63,9 @@ class Account(AbstractBaseUser):
                               max_length=255, unique=True)
     password = models.CharField(
         verbose_name="パスワード", max_length=255, unique=True)
-    is_active = models.BooleanField(verbose_name="ログイン状態", default=False)
+
+    # is_activeがfalseだと、管理画面に入れない
+    is_active = models.BooleanField(verbose_name="ログイン状態", default=True)
     is_staff = models.BooleanField(
         verbose_name="adminサイトのログイン権限", default=True)
     # name = models.CharField(max_length=255)

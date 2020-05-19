@@ -9,10 +9,10 @@ FROM python:3.7-alpine
 ENV PYTHONUNBUFFERED 1
 
 RUN apk update  \ 
-    && apk add gcc musl-dev jpeg-dev zlib-dev
+    && apk add gcc musl-dev jpeg-dev zlib-dev postgresql-dev
 
-# RUN apk update \
-#     && apk add  gcc  musl-dev jpeg-dev zlib-dev 
+# RUN apk update  \ 
+#     && apk add gcc musl-dev jpeg-dev zlib-dev postgresql-dev
 
 # COPYコマンドは、左が自分のパソコンのフォルダー、右側がコンテナのディレクトリー
 # linuxはルートディレクトリーが/から始まるるので/から始まる
@@ -22,9 +22,13 @@ COPY ./requirements.txt /requirements.txt
 RUN pip install -r /requirements.txt
 
 RUN mkdir /app
-
 # WORKDIRコマンドは、RUN、CMD などの命令で相対パスを指定したときのディレクトリを変えることができる
 WORKDIR /app
+
+# この二つが実行できない
+# RUN pip install pipenv 
+# RUN pipenv install --system --skip-lock --dev
+
 COPY ./app  /app
 
 
@@ -42,4 +46,27 @@ COPY ./app  /app
 # RUN apk update  \ 
 #     && apk add gcc musl-dev jpeg-dev zlib-dev
 
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# psycopg2-binaryをインストールするために
+
+# RUN apk update  \ 
+#     && apk add postgresql-dev
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# pipenvに関して
+# pipenv install
+# と打つとカレントディレクトリにあるPipfile・Pipfile.lockを探して
+# 自動でインストールしてくれる
+
+# --system : 仮想環境ではなくデフォルトのPythonにインストール
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# pipenv続き
+# 全部のパッケージを更新したい? それなら $ pipenv update とするだけです
+# ipenv install を実行したときに requirements.txt ファイルしか無い場合は、
+# Pipenvは自動でそのファイルの内容をインポートし Pipfile を作成します
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
