@@ -1,14 +1,18 @@
 version: '3'
 
+# トップレベルに書く「名前付きvolumes」は複数サービスから参照できる
+volumes:
+  postgres_data:
+
 services:
   app:
     build:
       context: .
     ports:
-      - 8000:8080
+      - 8000:8081
     volumes:
       - ./app:/app
-    command: python3 manage.py runserver 0.0.0.0:8080
+    command: python3 manage.py runserver 0.0.0.0:8081
     environment:
       - DB_HOST=db
       - DB_NAME=app
@@ -17,9 +21,12 @@ services:
     depends_on:
       - db
   db:
-    image: postgres:10-alpine
+    # image: postgres:10-alpine
+    image: postgres
     ports:
       - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=app
       - POSTGRES_USER=postgres
@@ -91,7 +98,112 @@ services:
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-# 2020 5 20 pgadminに関して
-# dbでポートを5432に設定することで、pgadminと連携することができる
+# コロンで区切るとハッシュになる
+# user:usr1  => {"user": "user1"}
 
+# つまり、以下のものをパースすると
+# volumes:
+#   - ./db:/db
+# [{"./db": "/db"}]
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# pgadminに関して 2020 5 20
+# dbでポートを5432に設定することで、pgadminと連携することができる
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# .envファイルに関して 2020 5 20
+# .envには、コンテナで参照するデフォルトの環境変数を定義する。このファイルは特殊で
+# docker-compose.ymlから参照する定義を記載せずとも有効になる
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# postgresのvolume 注意点 2020 5 21
+
+# postgresのvolumeは、トップレベルで書かないと,サーバー側から読めなくなるので、
+# トップレベルでvolumeを書いてから行う
+
+# ex)
+# トップレベルに書く「名前付きvolumes」は複数サービスから参照できる
+# volumes:
+#   postgres_data:
+
+# services:
+#   db:
+#     image: postgres
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data
+
+# 注意点2
+# ちなみに、以下のようにホストのディレクトリにマウントしした場合、localhostでアクセスした場合
+# ERR_EMPTY_RESPONSEという形でエラーが起きる
+
+# - ./postgres_data:/var/lib/postgresql/data
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# apkコマンドに--no-cache オプションを付けることで、
+# ローカルキャッシュを使用せず、ダウンロードしたパッケージファイルも実行後に削除されます。
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# volumeに関して 2020 5 21
+# データボリュームには名前付きボリュームと匿名ボリュームの2種類がある
+# 匿名ボリュームを利用した場合もデータの永続化はできます。
+# しかし、永続化したデータの再利用については、名前付きボリュームのようにうまくはできません
+# 匿名ボリュームはコンテナが新しく作成されるたびに新たに作成されます。
+
+# volumes:  --> 名前つきvolumes
+#   postgres_data:
+
+# services:
+#   db:
+#     image: postgres
+#     volumes:
+#       - /var/lib/postgresql/data  --> 匿名volumes
+#       - ./postgres_data:/var/lib/postgresql/data --> ※ディレクトリのマウント（同期）
+
+# https://nishinatoshiharu.com/docker-volume-tutorial/
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# volumeに関しての実験(上記のコードの場合) 2020 5 21
+
+# ~~~ディレクトリのマウント（同期）の結果~~~
+# docker volume ls
+# DRIVER              VOLUME NAME
+# ディレクトリのマウント（同期）の結果の結果は、volumeには登録されていない!!!
+
+# ~~~匿名volumesの結果~~~
+# docker volume ls
+# DRIVER              VOLUME NAME
+# local               88aadfe9e93417e488a332b6987cf9070c3333a4136426100337db098c6a28b2
+# 新しくdocker-compose upした場合、新しいvolumeが作られる
+
+# ~~~名前付きvolumesの結果~~~
+# docker volume ls
+# DRIVER              VOLUME NAME
+# local               yorozuapi_postgres_data
+# 新しくdocker-compose upした場合、新しいvolumeが作られない
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# ディレクトリのマウント（同期）のvolumeに関して 2020 5 21
+# volumeを持つことができるがパーミッションエラーになってしまう
+# アウトパターン
+#   volumes:
+#     - ./postgres_data:/var/lib/postgresql/data --> ※ディレクトリのマウント（同期）
+# https://qiita.com/reflet/items/5c0a488494c7d6904084
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# volumeに関してのコマンド
+# Volumeの一覧確認
+# docker volume ls
+
+# 未使用のVolumeを一括削除
+# docker volume prune
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

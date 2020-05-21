@@ -1,18 +1,10 @@
 FROM python:3.7-alpine
-# FROM python:3.7.5-slim
-
-# requirements.txt
-# # 環境変数
-# ENV APP_PATH /opt/apps/django/
 
 # Pythonが標準入出力をバッファリングすることを防ぐ
 ENV PYTHONUNBUFFERED 1
 
 RUN apk update  \ 
     && apk add gcc musl-dev jpeg-dev zlib-dev postgresql-dev
-
-# RUN apk update  \ 
-#     && apk add gcc musl-dev jpeg-dev zlib-dev postgresql-dev
 
 # COPYコマンドは、左が自分のパソコンのフォルダー、右側がコンテナのディレクトリー
 # linuxはルートディレクトリーが/から始まるるので/から始まる
@@ -29,7 +21,8 @@ WORKDIR /app
 # RUN pip install pipenv 
 # RUN pipenv install --system --skip-lock --dev
 
-COPY ./app  /app
+# ホストのapp以下のフォルダをコピーするだが、ymlでvolumeで同期しているので必要ない
+# COPY ./app  /app
 
 
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
