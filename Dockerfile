@@ -17,6 +17,7 @@ RUN mkdir /app
 # WORKDIRコマンドは、RUN、CMD などの命令で相対パスを指定したときのディレクトリを変えることができる
 WORKDIR /app
 
+# pipfileに関しては、ホスト側でappのディレクトリーに言って、pipenv installを行う
 # この二つが実行できない
 # RUN pip install pipenv 
 # RUN pipenv install --system --skip-lock --dev

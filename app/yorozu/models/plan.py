@@ -61,7 +61,7 @@ class Plan(models.Model):
         # 管理画面でアプリのタイトルの名前を変更
         verbose_name_plural = "プラン"
 
-    uuid = models.UUIDField(
+    id = models.UUIDField(
         default=uuid.uuid4, primary_key=True, editable=False)
     title = models.CharField("プランタイトル", max_length=255)
     description = models.TextField("プランの説明", max_length=255)

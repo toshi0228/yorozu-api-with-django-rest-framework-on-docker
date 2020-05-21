@@ -52,9 +52,10 @@ class Account(AbstractBaseUser):
     class Meta:
         # 管理画面でアプリのタイトルの名前を変更
         verbose_name_plural = "アカウント"
-    # uuid = models.UUIDField(default="a", editable=False)
 
-    uuid = models.UUIDField(
+    # jwtを使う場合は、変数名をuuidにしたらエラーになる jwtを作るさいにidというカラムを内部で参考にしている
+    # acuutnモデルに関しては、変数名を変えるとややこしくなるので、あまり変更しない方が良い
+    id = models.UUIDField(
         default=uuid.uuid4, primary_key=True, editable=False)
     username = models.CharField("氏名", max_length=30, unique=False, default="")
     last_name = models.CharField('苗字(姓)', max_length=30, blank=True)

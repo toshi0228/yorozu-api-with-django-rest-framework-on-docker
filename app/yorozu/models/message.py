@@ -10,7 +10,7 @@ class Message(models.Model):
     class Meta:
         verbose_name_plural = "メッセージ"
 
-    uuid = models.UUIDField(
+    id = models.UUIDField(
         default=uuid.uuid4, primary_key=True, editable=False)
     message_content = models.TextField("メッセージ内容", max_length=10)
 
