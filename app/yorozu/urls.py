@@ -1,5 +1,5 @@
 from django.urls import path, include
-from yorozu.api import profile
+from yorozu.api import profile, account
 from yorozu.views import (views_account,
                           views_plan,
                           views_tag,
@@ -20,7 +20,7 @@ from rest_framework import routers
 # ======================================================================
 
 router = routers.DefaultRouter()
-router.register('account', views_account.AccountViewSet)
+router.register('accounts', views_account.AccountViewSet)
 router.register('profiles', views_profile.ProfileViewSet)
 router.register('plan', views_plan.PlanViewSet)
 router.register('tag', views_tag.TagViewSet)
@@ -29,6 +29,7 @@ router.register('review', views_review.MessageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path('account/', account.AccountCreate.as_view()),
     path('profile/', profile.ProfileListAPIView.as_view()),
     path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view())
     # path('accout', views_message.as_view())
