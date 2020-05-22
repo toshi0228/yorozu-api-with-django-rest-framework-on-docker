@@ -4,17 +4,19 @@ from ..models import Message
 
 class MessageSerializer(serializers.ModelSerializer):
 
-    message_list = serializers.SerializerMethodField()
+    # message_list = serializers.SerializerMethodField()
 
     class Meta:
         model = Message
 
         fields = ("sender_yorozu_id", "receiver_yorozu_id",
-                  "message_content", "message_list", "created_at", "updated_at")
+                  "message_content", "created_at", "updated_at")
+        # fields = ("sender_yorozu_id", "receiver_yorozu_id",
+        #           "message_content", "message_list", "created_at", "updated_at")
 
-    def get_message_list(self, instance):
-        # print(instance)
-        return "a"
+    # def get_message_list(self, instance):
+    #     # print(instance)
+    #     return "a"
 
         # receiver_yorozu_id
 
