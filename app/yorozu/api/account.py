@@ -4,8 +4,14 @@ from ..serializers.serializer_account import AccountSerializer
 from ..models import Account
 
 
-class AccountCreate(views.APIView):
+# アカウントモデルの詳細(yorozuIDのみ表示)
+class AccountRetrieveAPIView(views.APIView):
+    def get(self, request, pk):
+        queryst = Account.objects.get(id=pk)
+        return Response(queryst.profile.yorozu_id, status=status.HTTP_200_OK)
 
+
+class AccountCreateAPIView(views.APIView):
     def post(self, request):
 
         serializer = AccountSerializer(data=request.data)

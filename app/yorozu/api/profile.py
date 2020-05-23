@@ -16,12 +16,21 @@ class ProfileListAPIView(views.APIView):
     def post(self, request, *args, **kwargs):
         return Response({})
 
+    # jwtの場合、これは使わなくなるのかな..
+    # permission_classes = (IsAuthenticated,)
+
+    # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+    # authenticationは認証で、そのトークンがデータベースにあるかどうかを判断
+    # permissionは、そのユーザーがログインしてあるユーザかどうか判断
+    # プロフィルールなど、他の人に、編集やら削除されないために、pemisttiionをつける
+    # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
 
 # プロフィールの詳細ページ
 class ProfileRetrieveAPIView(views.APIView):
 
     def get(self, request, pk):
-        profile = get_object_or_404(Profile, pk="yozozo")
+        profile = get_object_or_404(Profile, pk=pk)
         serializer = ProfileSerializer(instance=profile)
         return Response(serializer.data, status.HTTP_200_OK)
 
@@ -62,7 +71,7 @@ class ProfileRetrieveAPIView(views.APIView):
     # シリアライザーに関して
     # serializer = ProfileSerializer(instance=queryset)
     # serializer.data
-    # 引数のinstanceにモデルオブジェクトを指定して、シリアライザをインスタん化して,
+    # 引数のinstanceにモデルオブジェクトを指定して、シリアライザをインスタス化して,
     # JSON形式のデータに変換
     # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -70,7 +79,7 @@ class ProfileRetrieveAPIView(views.APIView):
     # シリアライザーに関して(バリデーションを行う場合）
     # 検証対象の入力データを引数を[data]に渡して、シリアライザをインスタンス化し,is_valid()を
     # 実行することで入力データをバリデーションを行うことができる
-    # serializer = ProfileSerializer(instance=queryset)
+    # serializer = ProfileSerializer(data=queryset)
     # serializer.is_valid()
     # serializer._validated_data
     # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

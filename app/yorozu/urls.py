@@ -29,10 +29,12 @@ router.register('reviews', views_review.MessageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('account/', account.AccountCreate.as_view()),
+    path('account/', account.AccountCreateAPIView.as_view()),
+    path('account/<pk>/', account.AccountRetrieveAPIView.as_view()),
     path('profile/', profile.ProfileListAPIView.as_view()),
     path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
-    path('message/', message.MessageList.as_view()),
+    path('message/', message.MessageListCreateAPIView.as_view()),
+    path('messagebox/', message.MessageInBoxListAPIView.as_view()),
     path('review/', review.ReviewListAPIView.as_view()),
     path('tag/', tag.TagListAPIView.as_view())
 
