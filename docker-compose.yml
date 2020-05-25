@@ -12,7 +12,8 @@ services:
       - 8000:8081
     volumes:
       - ./app:/app
-    command: python3 manage.py runserver 0.0.0.0:8081
+    # command: python3 manage.py runserver 0.0.0.0:8081
+    command: gunicorn --bind 0.0.0.0:8081 config.wsgi
     environment:
       - DB_HOST=db
       - DB_NAME=app
