@@ -257,3 +257,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+STATIC_ROOT = 'static'
+
+
+# ============================================================
+# STATIC_ROOTに関して
+# 集約用の管理コマンド「manage.py collectstatic」を実行した時に、
+# staticファイルがコピーされるディレクトリのパス
+
+# ============================================================
