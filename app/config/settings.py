@@ -253,17 +253,18 @@ USE_TZ = True
 # http://127.0.0.1:8000/media/%E3%83%B.jpg
 # ============================================================
 
-
-STATIC_URL = '/static/'
+# 画像に関して
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
+# cssとかjsに関して
 STATIC_ROOT = 'static'
+STATIC_URL = '/static/'
+
 
 
 # ============================================================
 # STATIC_ROOTに関して
 # 集約用の管理コマンド「manage.py collectstatic」を実行した時に、
 # staticファイルがコピーされるディレクトリのパス
-
 # ============================================================

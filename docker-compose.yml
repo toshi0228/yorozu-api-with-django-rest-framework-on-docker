@@ -4,6 +4,7 @@ version: '3'
 volumes:
   postgres_data:
   static_data:
+  media_data:
 
 services:
   app:
@@ -47,21 +48,10 @@ services:
     volumes:
       - ./nginx:/etc/nginx/conf.d
       - static_data:/static
-      # nginx:
-      #   restart: always
-      #   image: nginx
-      #   depends_on:
-      #     - django
-      #   ports:
-      #     - 8081:80
-      #   volumes:
-      #     - ./nginx/:/etc/nginx/
-      #     - staticdata:/opt/apps/static/
+      - ./app/media:/media
 
-
-      #以下の8000というポートがブラウザーから最初にリクエストされるポート
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-# リクエストの流れ
+# リクエストの流れ 2020 5 27
 # nginx:
 #   ports: 　　
 #     - 8000:80
@@ -70,10 +60,35 @@ services:
 # ポートに転送される
 
 # nginxのconfで設定した通り、今度はappコンテナにアクセスがいく。appコンテナにアクセス
-# できるようにexposeで,3031ポートを開けおく
+# できるようにexposeで,3031ポートを開けておく。
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
-  
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# nginxの設定に関して　　2020 5 27
+
+# nginx:
+#   volumes:
+    # - ./nginx:/etc/nginx/conf.d
+
+# nginxのコンテナの/nginx:/etc/nginx/conf.dというディレクトリの中には、
+# default.confというものがあるが、ここを./nginx/app.confのファイルとバインドマウント
+# することによって、設定を変える
+
+# ちなみに/nginx:/etc/nginx/nginx.confという設定ファイルもあるが、
+# このファイルの最後の行にinclude /etc/nginx/conf.d/*.confというものがあり、
+# ./nginx:/etc/nginx/conf.dで書いた設定ファイルが元の設定ファイルに上書きされる
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# nginxの不思議
+# dockerでstaticをvolumeすると、50x.html index.htmlも勝手にできる 謎だ,,
+# ちなみに以下のようなバインドマウントの場合は、そのような現象は起きない
+# - static_data:/media
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+
+
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # volumeに関して
 # volumesはディレクトリーの同期
