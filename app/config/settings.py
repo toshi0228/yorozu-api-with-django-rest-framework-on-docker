@@ -26,7 +26,11 @@ SECRET_KEY = 'g-*=ffi7auc(@po$_q3#n6e&xg%h^r^v4t!5hgoh2o6$#@or08'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["54.178.94.145"]
+# ec2用
+# ALLOWED_HOSTS = ["54.178.94.145"]
+
+# localhost用
+ALLOWED_HOSTS = []
 
 
 # Application definition

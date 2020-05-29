@@ -41,7 +41,26 @@ class Profile(models.Model):
     created_at = models.DateTimeField("作成日", default=datetime.now)
     updated_at = models.DateField("更新日", auto_now=True)
 
+    @classmethod
+    def get_prfofile_image(cls, MessageInstance):
+        # 送信者のyorozu_idから,送信者のプロフィールを持ってくる
+        sender_profile=cls.objects.filter(yorozu_id=MessageInstance.sender_yorozu_id.yorozu_id).first()
+        # 送信者のプロフィールから、プロフィール画像を取り出す
+        return sender_profile
+
     def __str__(self):
         # タイトルの名前を押して詳細に入ったときの名前を変更できる
         # return self.yorozuya_name
         return self.yorozuya_name
+
+
+
+# ===================================================================
+# MessageInstance.sender_yorozu_id.yorozu_idに関して
+
+# serializer_messageからMessageInstanceが届く。
+# MessageInstanceから、sendernのよろずIDを取り出すために、
+# MessageInstance.sender_yorozu_idをかく。
+# そして、このsender_yorozu_idのフィールドは、Profileモデルを参照している
+# ために、さらにMessageInstance.sender_yorozu_id.yorozu_idを取り出す
+# ===================================================================

@@ -29,39 +29,45 @@ class MessageInBoxListAPIView(views.APIView):
     '''自分に届いたメッセージリスト表示するAPI'''
 
     # authentication_classes = (TokenAuthentication,)
+    # この設定があることで、jwtを持っていないと入れない
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        print("メッセージボックス")
         try:
-            # yorozu_id = self.request.user.profile.yorozu_id
-            # queryset = Message.objects.filter(receiver_yorozu_id=yorozu_id)
-            # serializer = MessageSerializer(instance=queryset, many=True)
-            # return Response(serializer.data, status=status.HTTP_200_OK)
-            return Response("認証OK")
+            # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
+            yorozu_id = self.request.user.profile.yorozu_id
+            # yorozu_idから自分に届いた、メッセージを取り出す
+            queryset = Message.objects.filter(receiver_yorozu_id=yorozu_id)
+            serializer = MessageSerializer(instance=queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+            # return Response("認証")
         except:
             return Response("認証なし", status=status.HTTP_401_UNAUTHORIZED)
 
 
 # ==================================================================
-# tokenがある場合
-# self.request.userでユーザー情報を取り出すことができる
+# self.request.userに関して　2020 5 30
+# tokenがある場合、self.request.userでユーザー情報を取り出すことができる
+# self.request.user.profile.yorozu_idは、self.request.userで
+# ユーザーを取り出し、そのあと、リレーションしているプロフィールモデルから、
+# yorozu_idを取り出している
 # ==================================================================
 
 # ==================================================================
 # Authに関して 2020 5 22
 # permission_classes = (IsAuthenticated,)
 # permission_classes に IsAuthenticated をすることでで認証済みでないと
-# 実行できないAPIとなります
+# 実行できないAPIとなる。つまり、認証・登録ずみのユーザーのみアクセス許可
 # ==================================================================
 
 
-# # ====================================
-#     # request.dataで中身を見れる
-#     # def create(self, request):
-#     #     print(request.data)
-#     #     return "aaa"
-# # ====================================
+# ==================================================================
+# request.dataで中身を見れる
+# def create(self, request):
+#     print(request.data)
+#     return "aaa"
+# ==================================================================
+
 
 
 # class MyMessageBox(generics.ListAPIView):

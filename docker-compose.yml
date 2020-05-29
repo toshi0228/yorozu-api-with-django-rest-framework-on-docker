@@ -17,9 +17,10 @@ services:
     volumes:
       - ./app:/app
       - static_data:/app/static/
-    # command: python3 manage.py runserver 0.0.0.0:8081
+    command: python3 manage.py runserver 0.0.0.0:3031
     # command: gunicorn --bind 0.0.0.0:8081 config.wsgi
-    command: gunicorn --bind 0.0.0.0:3031 config.wsgi
+    #デプロイ用
+    # command: gunicorn --bind 0.0.0.0:3031 config.wsgi
     environment:
       - DB_HOST=db
       - DB_NAME=app
