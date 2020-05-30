@@ -8,13 +8,20 @@ from ..serializers.serializer_message import MessageSerializer
 
 
 class MessageListCreateAPIView(views.APIView):
-    '''メッセージの一覧と作成APIクラス'''
-
+    '''メッセージの送信したメッセージ一覧とメッセージ作成APIクラス'''
+    # この設定があることで、jwtを持っていないと入れない
+    permission_classes = (IsAuthenticated,)
     def get(self, request):
-        # querysetはリスト(iterable)なので、引数にmany=Trueが必要
-        queryset = Message.objects.all()
-        serializer = MessageSerializer(instance=queryset, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
+            yorozu_id = self.request.user.profile.yorozu_id
+            # 送信者が自分のメッセージを取り出す
+            queryset = Message.objects.filter(sender_yorozu_id=yorozu_id)
+            # querysetはリスト(iterable)なので、引数にmany=Trueが必要
+            serializer = MessageSerializer(instance=queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response("認証なし", status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request):
         serializer = MessageSerializer(data=request.data)
