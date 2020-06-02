@@ -11,6 +11,7 @@ class MessageListCreateAPIView(views.APIView):
     '''メッセージの送信したメッセージ一覧とメッセージ作成APIクラス'''
     # この設定があることで、jwtを持っていないと入れない
     permission_classes = (IsAuthenticated,)
+
     def get(self, request):
         try:
             # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
@@ -44,7 +45,8 @@ class MessageInBoxListAPIView(views.APIView):
             # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
             yorozu_id = self.request.user.profile.yorozu_id
             # yorozu_idから自分に届いた、メッセージを取り出す
-            queryset = Message.objects.filter(receiver_yorozu_id=yorozu_id)
+            queryset = Message.objects.filter(
+                receiver_yorozu_id=yorozu_id).order_by('-created_at')
             serializer = MessageSerializer(instance=queryset, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
             # return Response("認証")
@@ -74,7 +76,6 @@ class MessageInBoxListAPIView(views.APIView):
 #     print(request.data)
 #     return "aaa"
 # ==================================================================
-
 
 
 # class MyMessageBox(generics.ListAPIView):
