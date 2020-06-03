@@ -28,7 +28,7 @@ class MessageListCreateAPIView(views.APIView):
         serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response("登録完了")
+            return Response(serializer.data,status=status.HTTP_200_OK)
         print("登録失敗")
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
 
