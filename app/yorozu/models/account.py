@@ -3,14 +3,14 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
-
 from .profile import Profile
 
 # マネージャーは、モデルとクエリーの中間にあるもの 変換器と言うところか
 # パスワードをハッシュ化してデータベースに保存する
 # マネージャーは、データベースに保存する前の下ごしらえ
 
-
+# UserManagerクラスは、ユーザ名、メールアドレス、
+# パスワードに関するメソッドを提供するBaseUserManagerを継承します
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -18,9 +18,10 @@ class AccountManager(BaseUserManager):
         birth and password.
         """
         if not email:
-            raise ValueError('Users must have an email address')
+            raise ValueError('ユーザー登録には、メールアドレスが必要です')
 
-        # emailの大文字、小文字を変換する
+        # normalize_emailは、@から始まるemailの大文字、小文字を変換する
+        # ex)"Test@Gmail.com" -> Test@gmail.com
         # マネジャメソッドが自分の属しているモデルクラスを取り出すために self.model にアクセスできる
         user = self.model(
             email=self.normalize_email(email),
@@ -40,13 +41,30 @@ class AccountManager(BaseUserManager):
             email,
             password=password,
         )
-        user.is_admin = True
+        user.is_staff = True
+        user.is_superuser = True
+        # id_adminは必要ないかもしれない 2020 6/4
+        # user.is_admin = True
         user.save(using=self._db)
         return user
 
-
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # AbstractBaseUserを利用してカスタマイズユーザーを作成する場合、
-# BaseUserManagerを継承したカスタムマネージャーを実装する必要があります
+# BaseUserManagerを継承したカスタムマネージャーを実装する必要がある
+# ログイン時の認証においてusername以外を利用したい場合は、
+# AbstractBaseUserを継承したモデルであるカスタムユーザーを作成する必要がある
+# AbstractBaseUserは最低限な機能だけを持っている。AbstractUserが持っているフィールドの幾つかを
+# 消したり、大きな変更が必要な場合は、AbstractBaseUserが良い
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# 継承できるもの 使い分け
+# django.contrib.auth.models.AbstractUser ※追加のみを行う場合
+# django.contrib.auth.models.AbstractBaseUser ※基本属性の修正をする場合
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# !!!あとでAbstractBaseUserで、継承されているdata_joinedという登録日も入れたい
+
 class Account(AbstractBaseUser):
 
     class Meta:
@@ -65,15 +83,17 @@ class Account(AbstractBaseUser):
     password = models.CharField(
         verbose_name="パスワード", max_length=255, unique=True)
 
-    # is_activeがfalseだと、管理画面に入れない
+    # is_activeがfalseだと、管理画面に入れない(論理削除の時、使う)
     is_active = models.BooleanField(verbose_name="ログイン状態", default=True)
     is_staff = models.BooleanField(
-        verbose_name="adminサイトのログイン権限", default=True)
+        verbose_name="管理画面サイトのログイン権限", default=False)
     # name = models.CharField(max_length=255)
     # date_of_birth = models.DateField()
     # is_admin = models.BooleanField(default=False)
 
     objects = AccountManager()
+
+    # mailを利用したログイン認証にする
     USERNAME_FIELD = 'email'
     # REQUIRED_FIELDS = ['date_of_birth']
 
@@ -95,3 +115,12 @@ class Account(AbstractBaseUser):
     #     "Is the user a member of staff?"
     #     # Simplest possible answer: All admins are staff
     #     return self.is_admin
+
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# objects = AccountManager()に関して 2020 6 3
+# 標準のBaseUserManagerを使う代わりに、
+# AccountManagerを使うということをDjangoに知らせています。 これにより、今後「create_user」、
+# 「create_superuser」のメソッドを呼ぶときにUserManagerクラスの「create_user」、
+# 「create_superuser」のメソッドが呼ばれるようになります。
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
