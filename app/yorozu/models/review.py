@@ -1,6 +1,7 @@
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 from .profile import Profile
+
 
 
 class Review(models.Model):
@@ -18,7 +19,7 @@ class Review(models.Model):
     receiver_yorozu_id = models.ForeignKey(
         "Profile", verbose_name="受信者(万屋)", on_delete=models.CASCADE, related_name="review_receiver", default="")
 
-    created_at = models.DateTimeField("作成日", default=datetime.now)
+    created_at = models.DateTimeField("作成日", default=timezone.now)
     updated_at = models.DateField("更新日", auto_now=True)
 
     def __str__(self):

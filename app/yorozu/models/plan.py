@@ -1,6 +1,6 @@
 import uuid
 from django.db import models
-from datetime import datetime
+from django.utils import timezone
 
 
 class Tag(models.Model):
@@ -11,6 +11,8 @@ class Tag(models.Model):
         verbose_name_plural = "タグ"
 
     name = models.CharField("名称", max_length=64, unique=True, blank=True)
+    created_at = models.DateTimeField("作成日", default=timezone.now)
+    updated_at = models.DateField("更新日", auto_now=True)
 
     @classmethod
     def get_or_create(cls, tag):
@@ -72,7 +74,7 @@ class Plan(models.Model):
     # 参照先を外部のモデルに持つ時、ForeignKeyは循環参照が起きないように、第一引数を文字列にできる
     yorozuya_profile = models.ForeignKey(
         "Profile", null=True,  on_delete=models.CASCADE, default="", verbose_name="作成者")
-    created_at = models.DateTimeField("作成日", default=datetime.now)
+    created_at = models.DateTimeField("作成日", default=timezone.now)
     updated_at = models.DateField("更新日", auto_now=True)
 
     # プランのデータをfilterして取得できる

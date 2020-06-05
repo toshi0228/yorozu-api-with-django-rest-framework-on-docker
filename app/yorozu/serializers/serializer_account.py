@@ -1,6 +1,7 @@
+from django.contrib.auth import get_user_model
+
 from rest_framework import serializers
 from ..models import Plan
-from ..models import Account
 from .serializer_profile import ProfileSerializer
 from django.contrib.auth import get_user_model
 
@@ -10,21 +11,22 @@ class AccountSerializer(serializers.ModelSerializer):
     yorozu_id = serializers.SerializerMethodField()
 
     class Meta:
-        model = Account
+        model = get_user_model()
         # fields = "__all__"
         fielfs = ('email', 'password' "yorozu_id")
-        exclude = ("id", 'first_name', 'last_name', "username",
-                   "is_active", "is_staff", "last_login")
+        exclude = ("id", 'first_name', 'last_name',
+                   "is_active", "is_staff", "last_login","updated_at")
 
         # 開発中はextra_kwargsをoffにしておく
-        # extra_kwargs = {
-        #     "email": {
-        #         "write_only": True
-        #     },
-        #     "password": {
-        #         "write_only": True
-        #     }
-        # }
+        extra_kwargs = {
+            "email": {
+                "write_only": True
+            },
+            "password": {
+                "write_only": True,
+                "min_length": 5
+            }
+        }
 
         # =======================================================================
         #  extra_kwargsで"write_only": Trueにすることで書き込みだけしかできなくなる
@@ -37,7 +39,9 @@ class AccountSerializer(serializers.ModelSerializer):
         # =======================================================================
 
     def create(self, validated_data):
-        user = Account.objects.create_user(
+        """ユーザーを作成する時に、パスワードをハッシュ化する"""
+
+        user = get_user_model().objects.create_user(
             email=validated_data['email'],
             password=validated_data['password'],
         )

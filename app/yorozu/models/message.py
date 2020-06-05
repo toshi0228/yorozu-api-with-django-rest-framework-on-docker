@@ -1,7 +1,7 @@
 import uuid
 from django.db import models
-from datetime import datetime
 from .profile import Profile
+from django.utils import timezone
 
 
 class Message(models.Model):
@@ -22,7 +22,7 @@ class Message(models.Model):
 
     isRead = models.BooleanField(verbose_name='既読判定',default=False,)
 
-    created_at = models.DateTimeField("作成日", default=datetime.now)
+    created_at = models.DateTimeField("作成日", default=timezone.now)
     updated_at = models.DateField("更新日", auto_now=True)
 
     def __str__(self):

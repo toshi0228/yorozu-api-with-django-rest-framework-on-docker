@@ -1,9 +1,7 @@
 from django.conf import settings
 from django.db import models
 from .plan import Tag
-from datetime import datetime
-
-# from .account import MyUser
+from django.utils import timezone
 
 
 # # よろず屋プロフィール
@@ -38,7 +36,7 @@ class Profile(models.Model):
     facebook_account = models.CharField(
         "facebookのアカウント", max_length=80, default="", blank=True)
 
-    created_at = models.DateTimeField("作成日", default=datetime.now)
+    created_at = models.DateTimeField("作成日", default=timezone.now)
     updated_at = models.DateField("更新日", auto_now=True)
 
     @classmethod

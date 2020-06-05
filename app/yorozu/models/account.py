@@ -3,6 +3,7 @@ from django.db import models
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser
 )
+from django.utils import timezone
 from .profile import Profile
 
 # マネージャーは、モデルとクエリーの中間にあるもの 変換器と言うところか
@@ -75,7 +76,7 @@ class Account(AbstractBaseUser):
     # acuutnモデルに関しては、変数名を変えるとややこしくなるので、あまり変更しない方が良い
     id = models.UUIDField(
         default=uuid.uuid4, primary_key=True, editable=False)
-    username = models.CharField("氏名", max_length=30, unique=False, default="")
+    # username = models.CharField("氏名", max_length=30, unique=False, default="")
     last_name = models.CharField('苗字(姓)', max_length=30, blank=True)
     first_name = models.CharField('名前(名)', max_length=30, blank=True)
     email = models.EmailField(verbose_name='メールアドレス',
@@ -87,6 +88,10 @@ class Account(AbstractBaseUser):
     is_active = models.BooleanField(verbose_name="アカウントの状態", default=True)
     is_staff = models.BooleanField(
         verbose_name="管理画面サイトのログイン権限", default=False)
+
+    created_at = models.DateTimeField("作成日", default=timezone.now)
+    updated_at = models.DateField("更新日", auto_now=True)
+
     # name = models.CharField(max_length=255)
     # date_of_birth = models.DateField()
     # is_admin = models.BooleanField(default=False)
@@ -123,4 +128,13 @@ class Account(AbstractBaseUser):
 # AccountManagerを使うということをDjangoに知らせています。 これにより、今後「create_user」、
 # 「create_superuser」のメソッドを呼ぶときにUserManagerクラスの「create_user」、
 # 「create_superuser」のメソッドが呼ばれるようになります。
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# datetimeとtimezonの違い 2020 6 4
+# Pythonのdatetimeオブジェクトには２種類のオブジェクトがあります。
+# awareオブジェクト： タイムゾーンの情報を持っている
+# naiveオブジェクト : タイムゾーンの情報を持っておらず、協定世界時刻（UTC）と現地時間を区別しない
+
+# なぜ、djagnoの中で、datetimeを使うと,9時間遅れた時間になるので、datatimeを使う
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
