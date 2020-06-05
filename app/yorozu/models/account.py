@@ -84,7 +84,7 @@ class Account(AbstractBaseUser):
         verbose_name="パスワード", max_length=255, unique=True)
 
     # is_activeがfalseだと、管理画面に入れない(論理削除の時、使う)
-    is_active = models.BooleanField(verbose_name="ログイン状態", default=True)
+    is_active = models.BooleanField(verbose_name="アカウントの状態", default=True)
     is_staff = models.BooleanField(
         verbose_name="管理画面サイトのログイン権限", default=False)
     # name = models.CharField(max_length=255)

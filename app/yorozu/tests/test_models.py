@@ -49,9 +49,7 @@ class ModelTests(TestCase):
         # この値が真なら、ユーザは管理画面サイトにアクセスできる
 
         self.assertTrue(user.is_superuser)
-        print(user.is_superuser)
         self.assertTrue(user.is_staff)
-        print(user.is_staff)
 
 
 
