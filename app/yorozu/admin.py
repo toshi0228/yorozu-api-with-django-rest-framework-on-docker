@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Account, Profile, Plan, Tag, Message, Review
+from .models import Account, Profile, Plan, Tag, Message, Review, Request
 
 # カスタムユーザーモデルを作った時は、本当にadminもカスタマイズしないといけないのだろうか... 2020 64
 # class UserAdmin(BaseUserAdmin):
@@ -13,3 +13,4 @@ admin.site.register(Plan)
 admin.site.register(Tag)
 admin.site.register(Message)
 admin.site.register(Review)
+admin.site.register(Request)

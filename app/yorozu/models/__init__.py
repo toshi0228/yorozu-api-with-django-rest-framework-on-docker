@@ -10,6 +10,7 @@ from .plan import Plan
 from .plan import Tag
 from .message import Message
 from .review import Review
+from .request import Request
 
 
 # from .plan import Profile
