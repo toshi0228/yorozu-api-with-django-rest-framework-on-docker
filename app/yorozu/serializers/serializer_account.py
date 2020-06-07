@@ -13,11 +13,11 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         # fields = "__all__"
-        fielfs = ('email', 'password' "yorozu_id")
+        fielfs = ('email', 'password' "yorozu_id", 'created_at')
         exclude = ("id", 'first_name', 'last_name',
-                   "is_active", "is_staff", "last_login","updated_at")
+                   "is_active", "is_staff", "last_login", "updated_at")
 
-        # 開発中はextra_kwargsをoffにしておく
+        # # 開発中はextra_kwargsをoffにしておく
         extra_kwargs = {
             "email": {
                 "write_only": True

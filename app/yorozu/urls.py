@@ -27,9 +27,12 @@ router.register('tags', views_tag.TagViewSet)
 router.register('messages', views_message.MessageViewSet)
 router.register('reviews', views_review.MessageViewSet)
 
+
+app_name = 'yorozu'
+
 urlpatterns = [
     path('', include(router.urls)),
-    path('account/', account.AccountCreateAPIView.as_view()),
+    path('account/', account.AccountCreateAPIView.as_view(), name='accountCreate'),
     path('account/<pk>/', account.AccountRetrieveAPIView.as_view()),
     path('profile/', profile.ProfileListAPIView.as_view()),
     path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
@@ -43,3 +46,11 @@ urlpatterns = [
 ]
 
 # path('entry', views_plan_entry.api_entry),
+
+# ===============================================================================
+# app_nameに関して
+# app_name = includeされたアプリ側の urls.py で指定するプロジェクトにおける名前空間
+# app_name = 'yorozu'と書いておけば、testでurlを呼び出すときに、
+# reverse('yorozu:accountCreate') のように参照できるようになる。
+# 上記では yorozu/ 配下のURLは "yorozu" という名前空間になります。
+# ===============================================================================
