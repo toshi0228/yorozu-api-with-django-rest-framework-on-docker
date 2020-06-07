@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ..models import Message, Profile
-# from .serializer_profileImage import ProfileImageSerializer
 from .serializer_profile import ProfileSerializer
+
 
 class MessageSerializer(serializers.ModelSerializer):
 
@@ -11,10 +11,9 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
 
         fields = ("sender_yorozu_id", "receiver_yorozu_id",
-                  "message_content", "sender_profile","isRead","created_at", "updated_at")
+                  "message_content", "sender_profile", "isRead", "created_at", "updated_at")
         # fields = ("sender_yorozu_id", "receiver_yorozu_id",
         #           "message_content", "message_list", "created_at", "updated_at")
-
 
     def get_sender_profile(self, instance):
         '''送信者のプロフィールを取り出す'''
@@ -23,9 +22,9 @@ class MessageSerializer(serializers.ModelSerializer):
         sender_profile = Profile.get_prfofile_image(instance)
 
         # 送信者のプロフィールオブジェクトをシリアライザーに渡す
-        serializers =ProfileSerializer(instance=sender_profile)
+        serializers = ProfileSerializer(instance=sender_profile)
 
-        sender_profile={
+        sender_profile = {
             "nickname": serializers.data["nickname"],
             "yorozuya_name": serializers.data["yorozuya_name"],
             "profile_image": serializers.data["profile_image"],
