@@ -7,4 +7,4 @@ class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
         fields = ("sender_yorozu_id", "receiver_yorozu_id",
-                  "isApproval", "created_at", "updated_at")
+                  "is_approval", "created_at", "updated_at")

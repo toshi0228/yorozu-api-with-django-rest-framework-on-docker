@@ -34,3 +34,22 @@ class RequestListCreateAPIView(views.APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         print("登録失敗")
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request):
+        """よろずやがリクエストを承認したら,is_approvalをfalseからTrueに変更する"""
+
+        # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
+        yorozu_id = self.request.user.profile.yorozu_id
+        # 自分にプランのリクエストが来たデータを取り出す(現時点では、何回も同じ人にリクエストを送ることができるしようなので,firstをつける)
+        queryset = Request.objects.filter(
+            receiver_yorozu_id=yorozu_id, sender_yorozu_id=request.data['sender_yorozu_id']).first()
+
+        # partial=Trueがあることで、引数dataで渡した値のみが更新されるようになる
+        serializer = RequestSerializer(
+            instance=queryset, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            # patchで変更しても、saveしないとserializer.dataの値は反映されない
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response("プランリクエストの承認失敗", status=status.HTTP_400_BAD_REQUEST)

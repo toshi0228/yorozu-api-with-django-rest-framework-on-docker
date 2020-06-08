@@ -19,7 +19,7 @@ class Request(models.Model):
         "Profile", verbose_name="リクエスト受信者", on_delete=models.CASCADE, related_name="request_receiver")
 
     # リクエスト受信者(よろず屋)が承認したかどうか
-    isApproval = models.BooleanField(verbose_name='リクエストの承認状態', default=False)
+    is_approval = models.BooleanField(verbose_name='リクエストの承認状態', default=False)
 
     created_at = models.DateTimeField("作成日", default=timezone.now)
 

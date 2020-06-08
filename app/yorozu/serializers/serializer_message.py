@@ -11,7 +11,7 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
 
         fields = ("sender_yorozu_id", "receiver_yorozu_id",
-                  "message_content", "sender_profile", "isRead", "created_at", "updated_at")
+                  "message_content", "sender_profile", "is_read", "created_at", "updated_at")
         # fields = ("sender_yorozu_id", "receiver_yorozu_id",
         #           "message_content", "message_list", "created_at", "updated_at")
 
