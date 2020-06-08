@@ -1,7 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-
 from rest_framework.test import APIClient
 from rest_framework import status
 
@@ -24,6 +23,7 @@ class PublicUserApiTests(TestCase):
         self.Client = APIClient()
 
     # todo アカウント作成のテストは、JWTが必要になるので、あとで行う
+
     def test_create_valid_user_success(self):
         """ユーザーの作成のテスト"""
 
@@ -140,8 +140,6 @@ class PrivateUserApiTests(TestCase):
 
         res = self.client.post(ME_URL, {})
         self.assertEqual(res.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
-
-    # def
 
         # =======================================================================
         # check_password(raw_password)に関して

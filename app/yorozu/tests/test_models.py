@@ -1,6 +1,12 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+
+def sample_user(email='test@gmail.com', password='testpass'):
+    """サンプルユーザーを作成する"""
+    return get_user_model().objects.create_user(email, password)
+
+
 class ModelTests(TestCase):
 
     def test_create_user_with_email_successfull(self):
@@ -17,24 +23,22 @@ class ModelTests(TestCase):
         self.assertEqual(user.email, email)
         self.assertTrue(user.check_password(password))
 
-
     def test_new_user_email_normalized(self):
         """emailの@から始まる部分の大文字を小文字に変換できているか"""
         # ex)"Test@Gmail.com" -> Test@gmail.com
 
         email = "test@Gmail.CoM"
         user = get_user_model().objects.create_user(email=email, password="test123")
-        self.assertEqual(user.email,email.lower())
-
+        self.assertEqual(user.email, email.lower())
 
     def test_new_user_invalid_email(self):
         '''メールアドレスがない場合に、エラーが起きるかどうかテスト'''
 
         with self.assertRaises(ValueError):
-            get_user_model().objects.create_user(email=None,password="test123")
-            print(get_user_model().objects.create_user(email=None,password="test123"))
+            get_user_model().objects.create_user(email=None, password="test123")
+            print(get_user_model().objects.create_user(
+                email=None, password="test123"))
 
-    
     def test_create_new_superuser(self):
         """スーパーユーザーを作った時のテスト"""
 
@@ -52,8 +56,6 @@ class ModelTests(TestCase):
         self.assertTrue(user.is_staff)
 
 
-
-
 # ==================================================================
 # get_user_model()で,Userモデルへの参照をできるようになる
 # インスタンスのUserには、全てのユーザーデータが入っている
@@ -61,7 +63,7 @@ class ModelTests(TestCase):
 # ==================================================================
 
 # ==================================================================
-# check_password(password)に関して 
+# check_password(password)に関して
 # 渡された文字列がこのユーザの正しい文字列ならば True を返します。
 # (このメソッドは比較時にパスワードのハッシュ処理を行います)
 # create_user()で作られた、パスワードがハッシュ値なのでそれが正しいか確かめる

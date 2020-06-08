@@ -39,7 +39,7 @@ urlpatterns = [
     path('message/', message.MessageListCreateAPIView.as_view()),
     path('messagebox/', message.MessageInBoxListAPIView.as_view()),
     path('review/', review.ReviewListAPIView.as_view()),
-    path('tag/', tag.TagListAPIView.as_view()),
+    path('tag/', tag.TagListAPIView.as_view(), name='tag-list'),
     path('request/', request.RequestListCreateAPIView.as_view()),
 
     # path('accout', views_message.as_view())

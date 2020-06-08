@@ -27,7 +27,7 @@ class AdminSiteTests(TestCase):
         # 管理画面のユーザーリストページを表示 url =reverse('admin:core_user_changelist')
         # ※上記のやり方が正しいことやり方だが、今回は直接呼び出す
         res = self.Client.get(f'http://localhost/admin/yorozu/account/')
-
+        
         self.assertContains(res,self.user.email)
         # # 以下のものは、上記のself.assertContains(res,self.user.email)と同じ
         # self.assertContains(res,"test@gmail.com")
