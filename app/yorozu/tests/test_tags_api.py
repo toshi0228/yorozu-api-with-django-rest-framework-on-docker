@@ -21,13 +21,17 @@ class PublicTagsApiTests(TestCase):
     def test_retrieve_tags(self):
         """タグリストを取得できるかテスト"""
 
-        Tag.objects.create(name="インスタグラマー")
-        Tag.objects.create(name="企画")
+        tag1 = Tag.objects.create(name="企画")
+        tag2 = Tag.objects.create(name="インスタグラマー")
 
         res = self.client.get(TAGS_URL)
 
-        tags = Tag.objects.all().order_by('-id')
+        # カラム名の前にハイフン（-）を書くと降順
+        # ※メールソフトを開いて新しいメールが常に一番上に来ているなら、それは降順
+        tags = Tag.objects.all().order_by('-name')
         serializer = TagSerializer(tags, many=True)
-        # print()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data, serializer.data)
+
+        self.assertEqual(len(res.data), 2)
+        self.assertEqual(res.data[0]['name'], tag1.name)

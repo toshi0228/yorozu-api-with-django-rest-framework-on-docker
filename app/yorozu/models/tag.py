@@ -4,7 +4,7 @@ from django.utils import timezone
 
 
 class Tag(models.Model):
-    """タグ"""
+    """タグ(タグに関しては、プラン作成の時に作成される)"""
 
     class Meta:
         # 管理画面でアプリのタイトルの名前を変更
