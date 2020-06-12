@@ -161,8 +161,8 @@ MIDDLEWARE = [
 
 # 許可するオリジン
 CORS_ORIGIN_WHITELIST = [
-    # 'http://localhost:3000',
-    "http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com/"
+    'http://localhost:3000',
+    'http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com'
 ]
 
 
