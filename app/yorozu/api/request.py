@@ -38,7 +38,6 @@ class RequestListCreateAPIView(views.APIView):
 
     def patch(self, request):
         """よろずやがリクエストを承認したら,is_approvalをfalseからTrueに変更する"""
-
         print(request.data)
 
         # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
