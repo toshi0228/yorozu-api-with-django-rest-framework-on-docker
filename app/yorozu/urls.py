@@ -1,5 +1,5 @@
 from django.urls import path, include
-from yorozu.api import profile, account, message, review, tag, request
+from yorozu.api import profile, account, message, review, tag, request, contract
 from yorozu.views import (views_account,
                           views_plan,
                           views_tag,
@@ -40,10 +40,10 @@ urlpatterns = [
     path('messagebox/', message.MessageInBoxListAPIView.as_view()),
     path('review/', review.ReviewListAPIView.as_view()),
     path('tag/', tag.TagListAPIView.as_view(), name='tag-list'),
-    path('request/', request.RequestListCreateAPIView.as_view()),
-    path('request/me/', request.MyRequestListAPIView.as_view()),
-
-    # path('accout', views_message.as_view())
+    path('request/', request.ReceiveRequestListCreateAPIView.as_view()),
+    path('requestbox/', request.MySentRequestListAPIView.as_view()),
+    path('contract/', contract.ReceiveContractListCreateAPIView().as_view()),
+    # path('accout', views_message.as_view()),
 ]
 
 # path('entry', views_plan_entry.api_entry),

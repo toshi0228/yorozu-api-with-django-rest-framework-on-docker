@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from django.utils import timezone
 from .profile import Profile
+from .plan import Plan
 
 
 class Contract(models.Model):
@@ -18,8 +19,11 @@ class Contract(models.Model):
     receiver_yorozu_id = models.ForeignKey(
         "Profile", verbose_name="リクエスト受信者", on_delete=models.CASCADE, related_name="contract_receiver")
 
+    contract_plan = models.ForeignKey(
+        'Plan', verbose_name='契約をしたプラン', on_delete=models.CASCADE, related_name='contract_plan', default='')
+
     # リクエスト受信者(よろず屋)が承認したかどうか
-    isApproval = models.BooleanField(verbose_name='契約の承認状態', default=False)
+    is_approval = models.BooleanField(verbose_name='契約の承認状態', default=False)
 
     created_at = models.DateTimeField("作成日", default=timezone.now)
 

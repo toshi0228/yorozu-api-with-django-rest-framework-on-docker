@@ -6,7 +6,7 @@ from ..models import Request
 from ..serializers.serializer_request import RequestSerializer
 
 
-class RequestListCreateAPIView(views.APIView):
+class ReceiveRequestListCreateAPIView(views.APIView):
     """自分宛にプランリクエストをして来てくれたお客さんのリストの表示と作成"""
 
     # この設定があることで、jwtを持っていないと入れない
@@ -59,7 +59,7 @@ class RequestListCreateAPIView(views.APIView):
         return Response("プランリクエストの承認失敗", status=status.HTTP_400_BAD_REQUEST)
 
 
-class MyRequestListAPIView(views.APIView):
+class MySentRequestListAPIView(views.APIView):
     """自分が送信したプランリクエストを取得する"""
 
     def get(self, request):
