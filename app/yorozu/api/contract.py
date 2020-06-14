@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from ..models import Contract
 from ..models import Plan
 
-from ..serializers.serializer_contract import ContractSerializer
+from ..serializers.serializer_contract import GetContractSerializer, PostContractSerializer
 
 
 class ReceiveContractListCreateAPIView(views.APIView):
@@ -22,17 +22,17 @@ class ReceiveContractListCreateAPIView(views.APIView):
             queryset = Contract.objects.filter(
                 receiver_yorozu_id=yorozu_id).order_by('-created_at')
             # querysetはリスト(iterable)なので、引数にmany=Trueが必要
-            serializer = ContractSerializer(instance=queryset, many=True)
+            serializer = GetContractSerializer(instance=queryset, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
             return Response("認証なし", status=status.HTTP_401_UNAUTHORIZED)
 
-    # def post(self, request):
-    #     # シリアライズしたい時は、引数のデータに値を入れる
-    #     serializer = RequestSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_200_OK)
-    #     print("登録失敗")
-    #     return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request):
+        # シリアライズしたい時は、引数のデータに値を入れる
+        serializer = PostContractSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print("登録失敗")
+        return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
