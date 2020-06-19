@@ -7,12 +7,11 @@ class PlanSerializer(serializers.ModelSerializer):
 
     # 以下のようにすることで、ネストした値を受け取ることができる
     tags = TagSerializer(many=True, read_only=True)
-    # yorozuya_profile = ProfileSerializer()
 
     class Meta:
         model = Plan
         fields = ('id', 'title', 'description', 'image',
-                  'price', "tags",)
+                  'price', "tags", )
         # fields = ("id", 'title', 'description', 'image',
         #           'price', "tags", 'yorozuya_profile')
 
@@ -69,10 +68,10 @@ class PlanPostSerializer(serializers.Serializer):
 
         return plan
 
-# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# ===================================================================
 # 2020 4 29
 # djangoは、自動でモデルが追加される。idがプライマリーキー(pk)になる
-# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# ===================================================================
 
 
 # ===================================================================
