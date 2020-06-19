@@ -36,3 +36,22 @@ class ReceiveContractListCreateAPIView(views.APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         print("登録失敗")
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
+
+
+class MySentContractListAPIView(views.APIView):
+    """自分が送信したプラン契約の申請(本契約)を取得する"""
+
+    def get(self, request):
+        try:
+            # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
+            yorozu_id = self.request.user.profile.yorozu_id
+            # 自分でプランリクエストしたデータを取り出す
+            # .order_by('-created_at')で、フロント側で配列の最初に、新しいデータが入る
+            queryset = Contract.objects.filter(
+                sender_yorozu_id=yorozu_id).order_by('-created_at')
+            # querysetはリスト(iterable)なので、引数にmany=Trueが必要
+            serializer = GetContractSerializer(instance=queryset, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except:
+            return Response("認証なし", status=status.HTTP_401_UNAUTHORIZED)

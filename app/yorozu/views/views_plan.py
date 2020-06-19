@@ -1,13 +1,14 @@
 from rest_framework import viewsets
 from ..models import Plan
+# from ..serializers.serializer_plan import PlanSerializer, PlanPostSerializer
 from ..serializers.serializer_plan import PlanSerializer
-from ..serializers.serializer_plan_post import PlanPostSerializer
 
 
 class PlanViewSet(viewsets.ModelViewSet):
 
     queryset = Plan.objects.all()
     serializer_class = PlanSerializer
+    # serializer_class = PlanPostSerializer
 
 
 # def create(self, validated_data):

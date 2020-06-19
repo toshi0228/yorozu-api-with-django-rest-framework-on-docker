@@ -1,5 +1,5 @@
 from django.urls import path, include
-from yorozu.api import profile, account, message, review, tag, request, contract
+from yorozu.api import profile, account, message, review, tag, request, contract, plan
 from yorozu.views import (views_account,
                           views_plan,
                           views_tag,
@@ -22,7 +22,7 @@ from rest_framework import routers
 router = routers.DefaultRouter()
 router.register('accounts', views_account.AccountViewSet)
 router.register('profiles', views_profile.ProfileViewSet)
-router.register('plan', views_plan.PlanViewSet)
+router.register('plans', views_plan.PlanViewSet)
 router.register('tags', views_tag.TagViewSet)
 router.register('messages', views_message.MessageViewSet)
 router.register('reviews', views_review.MessageViewSet)
@@ -36,13 +36,15 @@ urlpatterns = [
     path('account/<pk>/', account.AccountRetrieveAPIView.as_view()),
     path('profile/', profile.ProfileListAPIView.as_view()),
     path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
+    path('plan/', plan.PlanListCreateAPIView.as_view()),
     path('message/', message.MessageListCreateAPIView.as_view()),
     path('messagebox/', message.MessageInBoxListAPIView.as_view()),
     path('review/', review.ReviewListAPIView.as_view()),
     path('tag/', tag.TagListAPIView.as_view(), name='tag-list'),
     path('request/', request.ReceiveRequestListCreateAPIView.as_view()),
-    path('requestbox/', request.MySentRequestListAPIView.as_view()),
-    path('contract/', contract.ReceiveContractListCreateAPIView().as_view()),
+    path('request/me/', request.MySentRequestListAPIView.as_view()),
+    path('contract/', contract.ReceiveContractListCreateAPIView.as_view()),
+    path('contract/me/', contract.MySentContractListAPIView.as_view()),
     # path('accout', views_message.as_view()),
 ]
 

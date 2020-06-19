@@ -1,7 +1,7 @@
 from rest_framework import status, views
 from ..models import Plan
 from rest_framework.response import Response
-from ..serializers.serializer_plan_post import PlanPostSerializer
+from ..serializers.serializer_plan import PlanPostSerializer
 
 # ===================================================================
 # プラン作成に関して、タグがリストのため、views.APIViewを使う
