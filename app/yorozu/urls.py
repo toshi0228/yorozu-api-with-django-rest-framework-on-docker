@@ -34,7 +34,7 @@ urlpatterns = [
     path('', include(router.urls)),
     path('account/', account.AccountCreateAPIView.as_view(), name='accountCreate'),
     path('account/<pk>/', account.AccountRetrieveAPIView.as_view()),
-    path('profile/', profile.ProfileListAPIView.as_view()),
+    path('profile/', profile.ProfileListCreateAPIView.as_view()),
     path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
     path('plan/', plan.PlanListCreateAPIView.as_view()),
     path('message/', message.MessageListCreateAPIView.as_view()),

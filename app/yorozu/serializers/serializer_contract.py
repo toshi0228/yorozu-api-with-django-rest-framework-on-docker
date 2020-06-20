@@ -8,19 +8,20 @@ class GetContractSerializer(serializers.ModelSerializer):
 
     # 以下のようにすることで、ネストした値を受け取ることができる
     contract_plan = PlanSerializer(read_only=True)
-    contract_yorozuya_profile = serializers.SerializerMethodField()
+    contract_yorozuya_name = serializers.SerializerMethodField()
+    purchaser_user_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Contract
         # fields = '__all__'
         fields = ("sender_yorozu_id", "receiver_yorozu_id",
-                  "contract_plan", "is_approval", "contract_yorozuya_profile", "created_at", "updated_at")
+                  "contract_plan", "is_approval", "contract_yorozuya_name", 'purchaser_user_name', "created_at", "updated_at")
 
-    def get_contract_yorozuya_profile(self, instance):
-        '''契約しているよろずやのプロフィール'''
-
+    def get_contract_yorozuya_name(self, instance):
+        '''契約しているよろずやの名前'''
         # receiver_yorozu_idは、profileとリレーションしてあるので、以下のようなことができる
-        return instance.receiver_yorozu_id.nickname
+        # return instance.receiver_yorozu_id.nickname
+        return instance.receiver_yorozu_id.yorozuya_name
 
         # ================================================================================
         # 2020 6 20
@@ -28,6 +29,10 @@ class GetContractSerializer(serializers.ModelSerializer):
         # つまり、fieldで定義したカラムをもつオブジェクトが入っているので、
         # 「instance.receiver_yorozu_id」や「instance.is_approval]で、値を参照することができる。
         # ================================================================================
+
+    def get_purchaser_user_name(self, instance):
+        '''プランを購入してくれた人のよろずやの名前'''
+        return instance.sender_yorozu_id.nickname
 
 
 class PostContractSerializer(serializers.ModelSerializer):

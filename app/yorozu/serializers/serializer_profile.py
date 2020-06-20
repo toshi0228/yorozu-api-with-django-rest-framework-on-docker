@@ -28,23 +28,12 @@ class ProfileSerializer(serializers.ModelSerializer):
             "instagram_account",
             "facebook_account",
             "plan_list",
-
         )
 
     # "account_id"をfiledsに入れれば、account情報を呼び出せる
 
     # 引数instanceには、Profileモデルの値が入っている
     def get_plan_list(self, instance):
-        # print(f'{"="*25}')
-        # 以下でprofileのアカウント_idを取得できる
-        # print(instance.account_id)
-
-        # print(get_user_model())
-        # print(settings.AUTH_USER_MODEL)
-        # User = get_user_model()
-        # print(User.objects.get(email="etoshi0228@gmail.com"))
-        # user = User.objects.get(email="etoshi0228@gmail.com")
-        # print(user.profile.yorozu_id)
 
         # プランモデルから、idに適合するモデルを引っ張ってくる
         filter_plan_list = Plan.multi_get_filter_plan(instance)
@@ -58,3 +47,37 @@ class ProfileSerializer(serializers.ModelSerializer):
         # ただ、ネストするとimageに関しては、http://127.0.0.1:8000がなくなるので
         # フロント側で自分で書かないといけない
         return serializers.data
+
+
+# ModelSerializerを使うと、ネストしていあるプランなど、余計なものがあるので、post用のシリアライザーを作成する
+class PostProfileSerializer(serializers.Serializer):
+    '''プロフィールを作成する時のシリアライザー'''
+
+    account_id = serializers.CharField(max_length=255)
+    yorozu_id = serializers.CharField(max_length=255)
+    nickname = serializers.CharField(max_length=255)
+    yorozuya_name = serializers.CharField(max_length=255)
+    profile_image = serializers.ImageField(default="")
+    yorozu_main_image = serializers.ImageField(default="")
+    profile_description = serializers.CharField(max_length=255)
+    review_score = serializers.IntegerField(default=0)
+    twitter_account = serializers.CharField(max_length=255, default="")
+    instagram_account = serializers.CharField(max_length=255, default="")
+    facebook_account = serializers.CharField(max_length=255, default="")
+
+    def create(self, validated_data):
+        profile = Profile.objects.create(**validated_data)
+
+        return profile
+    # ==================================================================================
+    # OneToOneFieldの逆参照に関して 2020 6 21
+    # accountとprofiledでOneToOneFieldだがprofileからは、account_idと言う形でaccountの
+    # 主キー(id)を参照することでできる
+    # ==================================================================================
+
+    # ==================================================================================
+    # **validated_dataに関して 2020 6 21
+    # 関数呼び出し時にオブジェクトに**をつけてしているすると要素にキーが引数名、値が引数の値として
+    # 展開されて渡される
+    # ex) obj = **{"id": 123} => id=123
+    # ==================================================================================

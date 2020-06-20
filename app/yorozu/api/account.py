@@ -8,7 +8,16 @@ from ..models import Account
 class AccountRetrieveAPIView(views.APIView):
     def get(self, request, pk):
         queryst = Account.objects.get(id=pk)
-        return Response(queryst.profile.yorozu_id, status=status.HTTP_200_OK)
+        # アカウントがあるが、profileがないとエラーになるので、try exceptを使う
+        try:
+            return Response(queryst.profile.yorozu_id, status=status.HTTP_200_OK)
+        except:
+            # アカウントがあるがprofileを登録していない場合
+            if queryst:
+                return Response('', status=status.HTTP_200_OK)
+            else:
+                # データベースにないアカウントの場合
+                return Response("エラー", status=status.HTTP_400_BAD_REQUEST)
 
 
 class AccountCreateAPIView(views.APIView):

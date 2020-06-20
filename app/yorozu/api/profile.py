@@ -1,23 +1,50 @@
 from ..models import Profile
-from ..serializers.serializer_profile import ProfileSerializer
+from ..serializers.serializer_profile import ProfileSerializer, PostProfileSerializer
 from rest_framework.response import Response
 from rest_framework import status, views
 from django.shortcuts import get_object_or_404
 
 
-# プロフィールのリストページ
-class ProfileListAPIView(views.APIView):
+class ProfileListCreateAPIView(views.APIView):
+    '''プロフィールのリストページ'''
 
     def get(self, request):
         queryset = Profile.objects.all()
         serializer = ProfileSerializer(instance=queryset, many=True)
         return Response(serializer.data, status.HTTP_200_OK)
 
-    def post(self, request, *args, **kwargs):
-        return Response({})
+    def post(self, request):
+
+        # PostProfileSerializerで型チェックを行う
+        serializer = PostProfileSerializer(data=request.data)
+
+        if serializer.is_valid():
+            # sserializer.saveで,ProfileSerializerのclassでオーバライドさせておいたcreateメソッドが動く
+            # ネストなど、していた複雑な値はここでカスタマイズする
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print("登録失敗")
+        return Response(serializer.errors,  status=status.HTTP_400_BAD_REQUEST)
+
+        # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+        # serializer.is_valid()がfalseになる時 2020 6 20
+        # serializer.is_valid()は、ただ型の確認をしているだけ、
+        # 例えば,intergerなのに、strデータが入ってくるとエラーになる
+        # また、必要なfieldが足りないかと行ってエラーになることはない。
+        # 足りないフィールドがある場合は、serializer.save()でエラーになる
+        # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+        # return Response({})
+
+    # def post(self, request):
+    #     serializer = MessageSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data,status=status.HTTP_200_OK)
+    #     print("登録失敗")
+    #     return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
 
     # jwtの場合、これは使わなくなるのかな..
-    # permission_classes = (IsAuthenticated,)
 
     # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
     # authenticationは認証で、そのトークンがデータベースにあるかどうかを判断
@@ -26,8 +53,8 @@ class ProfileListAPIView(views.APIView):
     # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 
-# プロフィールの詳細ページ
 class ProfileRetrieveAPIView(views.APIView):
+    '''プロフィールの詳細ページ'''
 
     def get(self, request, pk):
         profile = get_object_or_404(Profile, pk=pk)
