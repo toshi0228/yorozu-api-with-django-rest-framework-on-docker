@@ -12,30 +12,12 @@ class PlanSerializer(serializers.ModelSerializer):
         model = Plan
         fields = ('id', 'title', 'description', 'image',
                   'price', "tags", )
-        # fields = ("id", 'title', 'description', 'image',
-        #           'price', "tags", 'yorozuya_profile')
 
         # fields = ('title', 'tags',)
         # extra_kwargs = {
         #     # モデル上は必須フィールドだけれど、シリアライザでは Not必須にしたい場合は、required を上書きする
         #     'tags': {'required': False}
         # }
-
-    # def get_sender_profile(self, instance):
-    #     '''送信者のプロフィールを取り出す'''
-
-    #     # 引数instanceで受け取ったMessageインスタンスをprofileモデルの関数に渡す。
-    #     sender_profile = Profile.get_prfofile_image(instance)
-
-    #     # 送信者のプロフィールオブジェクトをシリアライザーに渡す
-    #     serializers = ProfileSerializer(instance=sender_profile)
-
-    #     sender_profile = {
-    #         "nickname": serializers.data["nickname"],
-    #         "yorozuya_name": serializers.data["yorozuya_name"],
-    #         "profile_image": serializers.data["profile_image"],
-    #     }
-    #     return sender_profile
 
 
 class PlanPostSerializer(serializers.Serializer):
@@ -45,7 +27,13 @@ class PlanPostSerializer(serializers.Serializer):
     image = serializers.ImageField(default="")
     price = serializers.IntegerField(default=0)
     tag = serializers.CharField(max_length=255)
-    profile_description = serializers.CharField(max_length=255)
+    yorozuya_profile_id = serializers.CharField(max_length=255)
+
+    # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+    # リレーション参照のフィールド名_idに関して 2020 6 22
+    # リレーションしたモデルオブジェクトの主キーを扱うためには、planでつけた「フィールド名_id」なので
+    # yorozuya_profile_idで、リレーション先の主キーを指定できる
+    # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
     # 引数のvalidated_dataは、上記の型を確認したデータが入っている
     def create(self, validated_data):
@@ -65,7 +53,6 @@ class PlanPostSerializer(serializers.Serializer):
         plan.tags.set(tag)
         # print("この中身が知りたい")
         # print(plan.tags.all())
-
         return plan
 
 # ===================================================================

@@ -17,6 +17,7 @@ class ProfileListCreateAPIView(views.APIView):
 
         # PostProfileSerializerで型チェックを行う
         serializer = PostProfileSerializer(data=request.data)
+        print(request.data)
 
         if serializer.is_valid():
             # sserializer.saveで,ProfileSerializerのclassでオーバライドさせておいたcreateメソッドが動く

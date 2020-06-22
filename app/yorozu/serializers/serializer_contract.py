@@ -38,9 +38,6 @@ class GetContractSerializer(serializers.ModelSerializer):
 class PostContractSerializer(serializers.ModelSerializer):
     """契約に関して登録する時のシリアライザー(post)"""
 
-    # 以下のようにすることで、ネストした値を受け取ることができる
-    # contract_plan = PlanSerializer(read_only=True)
-
     class Meta:
         model = Contract
         # fields = '__all__'

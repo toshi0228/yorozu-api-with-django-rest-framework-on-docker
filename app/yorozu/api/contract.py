@@ -37,6 +37,28 @@ class ReceiveContractListCreateAPIView(views.APIView):
         print("登録失敗")
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
 
+    def patch(self, request):
+        """よろずやがリクエストを承認したら,is_approvalをfalseからTrueに変更する"""
+        print(request.data)
+
+        # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
+        yorozu_id = self.request.user.profile.yorozu_id
+        # 自分にプランのリクエストが来たデータを取り出す
+        # 何回も同じ人にリクエストを送ってしまう人がいるので,firstをつける。
+        # またorder_by('-created_at')をつける事で、一番最新のリクエストに対して承認する
+        queryset = Contract.objects.filter(
+            receiver_yorozu_id=yorozu_id, sender_yorozu_id=request.data['sender_yorozu_id'], contract_plan=request.data['contract_plan']).order_by('-created_at').first()
+
+        # partial=Trueがあることで、引数dataで渡した値のみが更新されるようになる
+        serializer = PostContractSerializer(
+            instance=queryset, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            # patchで変更しても、saveしないとserializer.dataの値は反映されない
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response("プランリクエストの承認失敗", status=status.HTTP_400_BAD_REQUEST)
+
 
 class MySentContractListAPIView(views.APIView):
     """自分が送信したプラン契約の申請(本契約)を取得する"""

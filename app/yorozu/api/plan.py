@@ -18,22 +18,15 @@ class PlanListCreateAPIView(views.APIView):
         serializer = PlanSerializer(instance=queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-class PlanView(views.APIView):
-    serializer_class = PlanPostSerializer
-
-    def get(self, request, *args, **kwargs):
-        return Response({"message": "planリストはviews_planでリクエスト処理をする"})
-
     def post(self, request):
-        # print(request.body.get("profileDescription"))
-        # print(request.body)
+
         print(request.data)
         # -------------------------------------------------------------------------------
         # request.bodyは、axiosで送られてきた、データがバイト型になっている。
         # request.dataは、axiosで送られてきた、データが辞書型になっている。
         # -------------------------------------------------------------------------------
-        serializer = self.serializer_class(data=request.data)
+        # serializer = self.serializer_class(data=request.data)
+        serializer = PlanPostSerializer(data=request.data)
 
         # -------------------------------------------------------------------------------
         # is_valid()で、PlanPostSerializerで定義したフィールドのバリデーションを行なっている
@@ -55,3 +48,10 @@ class PlanView(views.APIView):
             return Response("プラン登録成功")
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class PlanView(views.APIView):
+    serializer_class = PlanPostSerializer
+
+    def get(self, request, *args, **kwargs):
+        return Response({"message": "planリストはviews_planでリクエスト処理をする"})
