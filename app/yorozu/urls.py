@@ -36,6 +36,8 @@ urlpatterns = [
     path('account/<pk>/', account.AccountRetrieveAPIView.as_view()),
     path('profile/', profile.ProfileListCreateAPIView.as_view()),
     path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
+    # path('profile/search/', profile.SearchProfileAPIView.as_view()),
+    path('search/profile/', profile.SearchProfileAPIView.as_view()),
     path('plan/', plan.PlanListCreateAPIView.as_view()),
     path('message/', message.MessageListCreateAPIView.as_view()),
     path('messagebox/', message.MessageInBoxListAPIView.as_view()),
