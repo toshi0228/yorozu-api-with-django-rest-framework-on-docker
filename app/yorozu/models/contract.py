@@ -9,7 +9,7 @@ class Contract(models.Model):
     '''契約に関してのモデル'''
 
     class Meta:
-        verbose_name_plural = '契約(本契約)'
+        verbose_name_plural = '契約'
 
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
 

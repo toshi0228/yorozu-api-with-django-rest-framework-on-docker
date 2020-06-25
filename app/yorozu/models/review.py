@@ -3,15 +3,20 @@ from django.utils import timezone
 from .profile import Profile
 
 
-
 class Review(models.Model):
 
     class Meta:
         verbose_name_plural = "レビュー"
 
-    review_content = models.TextField("レビュー内容")
+    # review_content = models.TextField("レビュー内容")
 
-    review_score = models.IntegerField("評価点数")
+    # review_score = models.IntegerField("評価点数")
+
+    is_positive_score = models.BooleanField(
+        verbose_name='ポジティブ得点', default=False)
+
+    is_negative_score = models.BooleanField(
+        verbose_name="ネガティブ得点", default=False)
 
     sender_yorozu_id = models.ForeignKey(
         "Profile", verbose_name="送信者(ユーザー)", on_delete=models.CASCADE, related_name="review_sender", default="")

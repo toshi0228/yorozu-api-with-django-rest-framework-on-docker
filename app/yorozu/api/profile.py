@@ -61,8 +61,6 @@ class SearchProfileAPIView(views.APIView):
 
     def post(self, request):
 
-        print(request.data["keyword"])
-
         # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
         # タグでの検索
         # tag_queryset => <QuerySet [<Tag: 企画>, <Tag: 企画屋>]>
@@ -87,9 +85,13 @@ class SearchProfileAPIView(views.APIView):
             for queryset in plan_queryset:
                 profile_queryset.append(queryset.yorozuya_profile)
 
+            # tagの場合、profileに重複があるので、同じものを統合する
+            # [<Profile: しずかちゃん屋>,<Profile: しずかちゃん屋>] =>[<Profile: しずかちゃん屋>]
+            _profile_queryset = list(set(profile_queryset))
+
             serializer = ProfileSerializer(
-                instance=profile_queryset, many=True)
-            return Response(serializer.data)
+                instance=_profile_queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -110,7 +112,7 @@ class SearchProfileAPIView(views.APIView):
         if plan_queryset:
             serializer = ProfileSerializer(
                 instance=profile_queryset, many=True)
-            return Response(serializer.data)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
@@ -125,7 +127,7 @@ class SearchProfileAPIView(views.APIView):
                 instance=queryset, many=True)
             return Response(serializer.data)
         else:
-            return Response("検索条件にマッチしたものがありませんでした")
+            return Response("検索条件にマッチしたものがありませんでした", status=status.HTTP_200_OK)
 
         # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
