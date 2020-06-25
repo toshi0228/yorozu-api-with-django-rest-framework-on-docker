@@ -1,14 +1,5 @@
 from django.urls import path, include
 from yorozu.api import profile, account, message, review, tag, request, contract, plan
-from yorozu.views import (views_account,
-                          views_plan,
-                          views_tag,
-                          api_view_plan,
-                          views_profile,
-                          views_message,
-                          views_review
-                          )
-from rest_framework import routers
 
 
 # ======================================================================
@@ -19,19 +10,10 @@ from rest_framework import routers
 # http://127.0.0.1:8081/account/register/
 # ======================================================================
 
-router = routers.DefaultRouter()
-router.register('accounts', views_account.AccountViewSet)
-router.register('profiles', views_profile.ProfileViewSet)
-router.register('plans', views_plan.PlanViewSet)
-router.register('tags', views_tag.TagViewSet)
-router.register('messages', views_message.MessageViewSet)
-router.register('reviews', views_review.MessageViewSet)
-
 
 app_name = 'yorozu'
 
 urlpatterns = [
-    path('', include(router.urls)),
     path('account/', account.AccountCreateAPIView.as_view(), name='accountCreate'),
     path('account/<pk>/', account.AccountRetrieveAPIView.as_view()),
     path('profile/', profile.ProfileListCreateAPIView.as_view()),
@@ -47,10 +29,8 @@ urlpatterns = [
     path('request/me/', request.MySentRequestListAPIView.as_view()),
     path('contract/', contract.ReceiveContractListCreateAPIView.as_view()),
     path('contract/me/', contract.MySentContractListAPIView.as_view()),
-    # path('accout', views_message.as_view()),
 ]
 
-# path('entry', views_plan_entry.api_entry),
 
 # ===============================================================================
 # app_nameに関して
