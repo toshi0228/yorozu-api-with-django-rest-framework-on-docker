@@ -35,3 +35,16 @@ class PublicTagsApiTests(TestCase):
 
         self.assertEqual(len(res.data), 2)
         self.assertEqual(res.data[0]['name'], tag1.name)
+
+    def test_create_tag_successful(self):
+        """新しくタグを作るテスト"""
+
+        payload = {'name': 'テストタグ'}
+        self.client.post(TAGS_URL, payload)
+
+        # .exists()は、存在すればTrueを返す
+        exists = Tag.objects.filter(
+            name=payload['name']
+        ).exists()
+
+        self.assertTrue(exists)

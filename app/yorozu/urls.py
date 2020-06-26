@@ -20,7 +20,7 @@ urlpatterns = [
     path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
     # path('profile/search/', profile.SearchProfileAPIView.as_view()),
     path('search/profile/', profile.SearchProfileAPIView.as_view()),
-    path('plan/', plan.PlanListCreateAPIView.as_view()),
+    path('plan/', plan.PlanListCreateAPIView.as_view(), name='plan'),
     path('message/', message.MessageListCreateAPIView.as_view()),
     path('messagebox/', message.MessageInBoxListAPIView.as_view()),
     path('review/', review.ReviewListAPIView.as_view()),

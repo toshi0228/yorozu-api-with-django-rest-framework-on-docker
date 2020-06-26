@@ -1,10 +1,27 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
+from yorozu import models
+from ..models import Profile, Tag
+
 
 def sample_user(email='test@gmail.com', password='testpass'):
     """サンプルユーザーを作成する"""
     return get_user_model().objects.create_user(email, password)
+
+
+# プランのテストの時に必要
+def sample_profile(nickname="テスト", yorozuya_name="テスト屋", profile_image="", plan_thumbnail_image="",
+                   profile_description="テストテキスト", review_score=2, twitter_account="",  instagram_account="", facebook_account=""):
+    """サンプルユーザーを作成する"""
+
+    return Profile.objects.create(account_id=sample_user().id, nickname=nickname, yorozuya_name=yorozuya_name, review_score=1)
+
+
+# プランのテストの時に必要
+def sample_tag(name="サンプルのタグ"):
+    """サンプルのタグを作成"""
+    return Tag.objects.create(name=name)
 
 
 class ModelTests(TestCase):
@@ -54,6 +71,26 @@ class ModelTests(TestCase):
 
         self.assertTrue(user.is_superuser)
         self.assertTrue(user.is_staff)
+
+    def test_tag_str(self):
+        """タグ作成され文字列で表示されるかテスト"""
+
+        tag = models.Tag.objects.create(
+            name="企画"
+        )
+        self.assertEqual(str(tag), tag.name)
+
+    def test_plan_str(self):
+        """プランが表示されるか"""
+        plan = models.Plan.objects.create(
+            title="プランタイトル",
+            description="サンプル説明",
+            image="",
+            price=12,
+            yorozuya_profile=sample_profile(),
+        )
+
+        self.assertEqual(str(plan), plan.title)
 
 
 # ==================================================================

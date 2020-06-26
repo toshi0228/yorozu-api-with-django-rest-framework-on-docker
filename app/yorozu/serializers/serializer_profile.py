@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from ..models import Profile
 from .serializer_plan import PlanSerializer
-from ..models import Plan
+from ..models import Plan, Review
 from django.contrib.auth import get_user_model
 # from django.conf import settings
 
@@ -11,6 +11,9 @@ class ProfileSerializer(serializers.ModelSerializer):
     # SerializerMethodFieldを使うことで、モデルに登録していないフィールドを自分で作ることができる。
     # SerializerMethodField は get_xxxx ってなっているメソッドをコールする
     plan_list = serializers.SerializerMethodField()
+    score = serializers.SerializerMethodField()
+
+    # postive negative model
 
     class Meta:
         model = Profile
@@ -23,10 +26,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "profile_image",
             "profile_description",
             "plan_thumbnail_image",
-            "review_score",
-            "twitter_account",
-            "instagram_account",
-            "facebook_account",
+            "score",
             "plan_list",
         )
 
@@ -47,6 +47,27 @@ class ProfileSerializer(serializers.ModelSerializer):
         # ただ、ネストするとimageに関しては、http://127.0.0.1:8000がなくなるので
         # フロント側で自分で書かないといけない
         return serializers.data
+
+    def get_score(self, instance):
+
+        recieve_review_list = Review.objects.filter(
+            receiver_yorozu_id=instance)
+        # レビュがある場合は,true
+        if recieve_review_list:
+            positive_score = []
+            negative_score = []
+
+            for recieve_review in recieve_review_list:
+                # trueの場合は、特点を追加する
+                if recieve_review.is_positive_score:
+                    positive_score.append(recieve_review.is_positive_score)
+
+                if recieve_review.is_negative_score:
+                    negative_score.append(recieve_review.is_negative_score)
+
+            return {"positive_score": len(positive_score), "negative_score": len(negative_score)}
+
+        return {"positive_score": 0, "negative_score": 0}
 
 
 # ModelSerializerを使うと、ネストしていあるプランなど、余計なものがあるので、post用のシリアライザーを作成する

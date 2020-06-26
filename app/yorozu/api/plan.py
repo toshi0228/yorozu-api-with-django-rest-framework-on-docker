@@ -50,8 +50,8 @@ class PlanListCreateAPIView(views.APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PlanView(views.APIView):
-    serializer_class = PlanPostSerializer
+# class PlanView(views.APIView):
+#     serializer_class = PlanPostSerializer
 
-    def get(self, request, *args, **kwargs):
-        return Response({"message": "planリストはviews_planでリクエスト処理をする"})
+#     def get(self, request, *args, **kwargs):
+#         return Response({"message": "planリストはviews_planでリクエスト処理をする"})

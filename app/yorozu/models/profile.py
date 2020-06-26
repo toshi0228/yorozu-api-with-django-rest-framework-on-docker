@@ -25,16 +25,17 @@ class Profile(models.Model):
     profile_image = models.ImageField("プロフィール画像", upload_to='', default="")
     plan_thumbnail_image = models.ImageField("サムネ画像", upload_to='', default="")
     profile_description = models.TextField("プロフィール説明", max_length=255)
-    review_score = models.IntegerField("レビュースコア")
 
-    twitter_account = models.CharField(
-        "twitterのアカウント", max_length=80, default="", blank=True)
+    # review_score = models.IntegerField("レビュースコア")
 
-    instagram_account = models.CharField(
-        "instagramのアカウント", max_length=80, default="", blank=True)
+    # twitter_account = models.CharField(
+    #     "twitterのアカウント", max_length=80, default="", blank=True)
 
-    facebook_account = models.CharField(
-        "facebookのアカウント", max_length=80, default="", blank=True)
+    # instagram_account = models.CharField(
+    #     "instagramのアカウント", max_length=80, default="", blank=True)
+
+    # facebook_account = models.CharField(
+    #     "facebookのアカウント", max_length=80, default="", blank=True)
 
     created_at = models.DateTimeField("作成日", default=timezone.now)
     updated_at = models.DateField("更新日", auto_now=True)

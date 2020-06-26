@@ -8,10 +8,6 @@ class Review(models.Model):
     class Meta:
         verbose_name_plural = "レビュー"
 
-    # review_content = models.TextField("レビュー内容")
-
-    # review_score = models.IntegerField("評価点数")
-
     is_positive_score = models.BooleanField(
         verbose_name='ポジティブ得点', default=False)
 
