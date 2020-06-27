@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.utils import timezone
 from .profile import Profile
@@ -7,6 +8,9 @@ class Review(models.Model):
 
     class Meta:
         verbose_name_plural = "レビュー"
+
+    id = models.UUIDField(
+        default=uuid.uuid4, primary_key=True, editable=False)
 
     is_positive_score = models.BooleanField(
         verbose_name='ポジティブ得点', default=False)

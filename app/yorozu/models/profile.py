@@ -19,9 +19,9 @@ class Profile(models.Model):
     # primary_key=Trueにすることで、主キーになる
     # よろずIDはprofileのIDでもあり、profile詳細ページのURLになる
     yorozu_id = models.CharField(
-        "YOROZU ID", max_length=20, default="", primary_key=True)
-    nickname = models.CharField("ニックネーム", max_length=10)
-    yorozuya_name = models.CharField("万屋の名前", max_length=10, default="")
+        "YOROZU ID", max_length=32, default="", primary_key=True)
+    nickname = models.CharField("ニックネーム", max_length=32)
+    yorozuya_name = models.CharField("万屋の名前", max_length=32, default="")
     profile_image = models.ImageField("プロフィール画像", upload_to='', default="")
     plan_thumbnail_image = models.ImageField("サムネ画像", upload_to='', default="")
     profile_description = models.TextField("プロフィール説明", max_length=255)

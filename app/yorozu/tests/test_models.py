@@ -5,17 +5,17 @@ from yorozu import models
 from ..models import Profile, Tag
 
 
-def sample_user(email='test@gmail.com', password='testpass'):
+def sample_user(email='sample@gmail.com', password='testpass'):
     """サンプルユーザーを作成する"""
-    return get_user_model().objects.create_user(email, password)
+    return get_user_model().objects.create_user(email=email, password=password)
 
 
-# プランのテストの時に必要
+# # プランのテストの時に必要
 def sample_profile(nickname="テスト", yorozuya_name="テスト屋", profile_image="", plan_thumbnail_image="",
-                   profile_description="テストテキスト", review_score=2, twitter_account="",  instagram_account="", facebook_account=""):
+                   profile_description="テストテキスト", score={"positiveScore": 0, "negativeScore": 0}):
     """サンプルユーザーを作成する"""
 
-    return Profile.objects.create(account_id=sample_user().id, nickname=nickname, yorozuya_name=yorozuya_name, review_score=1)
+    return Profile.objects.create(account_id=sample_user().id, nickname=nickname, yorozuya_name=yorozuya_name)
 
 
 # プランのテストの時に必要
@@ -81,7 +81,7 @@ class ModelTests(TestCase):
         self.assertEqual(str(tag), tag.name)
 
     def test_plan_str(self):
-        """プランが表示されるか"""
+        """プランが表示されるかテスト"""
         plan = models.Plan.objects.create(
             title="プランタイトル",
             description="サンプル説明",

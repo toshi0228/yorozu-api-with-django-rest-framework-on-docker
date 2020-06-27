@@ -81,10 +81,10 @@ class PostProfileSerializer(serializers.Serializer):
     profile_image = serializers.ImageField(default="")
     plan_thumbnail_image = serializers.ImageField(default="")
     profile_description = serializers.CharField(max_length=255)
-    review_score = serializers.IntegerField(default=0)
-    twitter_account = serializers.CharField(max_length=255, default="")
-    instagram_account = serializers.CharField(max_length=255, default="")
-    facebook_account = serializers.CharField(max_length=255, default="")
+    # review_score = serializers.IntegerField(default=0)
+    # twitter_account = serializers.CharField(max_length=255, default="")
+    # instagram_account = serializers.CharField(max_length=255, default="")
+    # facebook_account = serializers.CharField(max_length=255, default="")
 
     def create(self, validated_data):
         profile = Profile.objects.create(**validated_data)

@@ -6,5 +6,5 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Review
-        fields = ("id", "sender_yorozu_id", "receiver_yorozu_id",
-                  "review_content", "review_score", "created_at")
+        fields = ("sender_yorozu_id", "receiver_yorozu_id",
+                  "is_positive_score", "is_positive_score", "created_at")
