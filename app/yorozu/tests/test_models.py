@@ -2,26 +2,12 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 
 from yorozu import models
-from ..models import Profile, Tag
+from ..models import Profile, Tag, Profile
 
 
 def sample_user(email='sample@gmail.com', password='testpass'):
     """サンプルユーザーを作成する"""
     return get_user_model().objects.create_user(email=email, password=password)
-
-
-# # プランのテストの時に必要
-def sample_profile(nickname="テスト", yorozuya_name="テスト屋", profile_image="", plan_thumbnail_image="",
-                   profile_description="テストテキスト", score={"positiveScore": 0, "negativeScore": 0}):
-    """サンプルユーザーを作成する"""
-
-    return Profile.objects.create(account_id=sample_user().id, nickname=nickname, yorozuya_name=yorozuya_name)
-
-
-# プランのテストの時に必要
-def sample_tag(name="サンプルのタグ"):
-    """サンプルのタグを作成"""
-    return Tag.objects.create(name=name)
 
 
 class ModelTests(TestCase):
@@ -53,8 +39,6 @@ class ModelTests(TestCase):
 
         with self.assertRaises(ValueError):
             get_user_model().objects.create_user(email=None, password="test123")
-            print(get_user_model().objects.create_user(
-                email=None, password="test123"))
 
     def test_create_new_superuser(self):
         """スーパーユーザーを作った時のテスト"""
@@ -82,26 +66,85 @@ class ModelTests(TestCase):
 
     def test_plan_str(self):
         """プランが表示されるかテスト"""
+
+        profile = Profile.objects.create(account_id=sample_user().id,
+                                         yorozu_id="SampleYorozuId",
+                                         nickname="テステス２",
+                                         yorozuya_name="テスト屋",
+                                         profile_image="",
+                                         plan_thumbnail_image="",
+                                         profile_description="サンプル説明")
+
         plan = models.Plan.objects.create(
             title="プランタイトル",
             description="サンプル説明",
             image="",
             price=12,
-            yorozuya_profile=sample_profile(),
+            yorozuya_profile=profile
         )
 
         self.assertEqual(str(plan), plan.title)
 
+    def test_profile_str(self):
+        """プロフィールが表示されるかテスト"""
 
-# ==================================================================
-# get_user_model()で,Userモデルへの参照をできるようになる
-# インスタンスのUserには、全てのユーザーデータが入っている
-# User.objects.all()で全てのデータの中身を見れる
-# ==================================================================
+        profile = Profile.objects.create(account_id=sample_user().id,
+                                         yorozu_id="SampleYorozuId",
+                                         nickname="テストニックネーム",
+                                         yorozuya_name="テスト屋さん",
+                                         profile_image="",
+                                         plan_thumbnail_image="",
+                                         profile_description="サンプル説明")
 
-# ==================================================================
-# check_password(password)に関して
-# 渡された文字列がこのユーザの正しい文字列ならば True を返します。
-# (このメソッドは比較時にパスワードのハッシュ処理を行います)
-# create_user()で作られた、パスワードがハッシュ値なのでそれが正しいか確かめる
-# ==================================================================
+        self.assertEqual(str(profile), profile.yorozuya_name)
+
+    def test_message_str(self):
+        """メッセージモデルに関してのテスト"""
+
+        # メッセージに関してのテストをするために、送信者と受信者の二人のユーザーを作成する
+
+        # アカウント作成
+        user1 = get_user_model().objects.create_user(
+            email="sample1@gmail.com", password="password1")
+
+        user2 = get_user_model().objects.create_user(
+            email="sample2@gmail.com", password="password2")
+
+        # プロフィール作成
+        user1_profile = Profile.objects.create(account_id=user1.id,
+                                               yorozu_id='sample1YorozuId',
+                                               nickname='サンプル1',
+                                               yorozuya_name='サンプル1屋',
+                                               profile_image='',
+                                               plan_thumbnail_image='',
+                                               profile_description='サンプル1の説明')
+
+        user2_profile = Profile.objects.create(account_id=user2.id,
+                                               yorozu_id='sample2YorozuId',
+                                               nickname='サンプル2',
+                                               yorozuya_name='サンプル2屋',
+                                               profile_image='',
+                                               plan_thumbnail_image='',
+                                               profile_description='サンプル2の説明')
+
+        # user1がuser2にメッセージを送信
+        message = models.Message.objects.create(
+            sender_yorozu_id=user1_profile,
+            receiver_yorozu_id=user2_profile,
+            message_content='こんにちは user2, 私はuser1です',
+            is_read=False
+        )
+
+        self.assertEqual(str(message), f'送り主:{message.sender_yorozu_id}')
+
+        # ==================================================================
+        # get_user_model()で,Userモデルへの参照をできるようになる
+        # インスタンスのUserには、全てのユーザーデータが入っている
+        # User.objects.all()で全てのデータの中身を見れる
+        # ==================================================================
+        # ==================================================================
+        # check_password(password)に関して
+        # 渡された文字列がこのユーザの正しい文字列ならば True を返します。
+        # (このメソッドは比較時にパスワードのハッシュ処理を行います)
+        # create_user()で作られた、パスワードがハッシュ値なのでそれが正しいか確かめる
+        # ==================================================================

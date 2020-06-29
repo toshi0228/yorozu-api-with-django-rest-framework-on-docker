@@ -34,7 +34,7 @@ class ReceiveContractListCreateAPIView(views.APIView):
         serializer = PostContractSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         print("登録失敗")
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
 

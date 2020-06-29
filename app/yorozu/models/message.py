@@ -14,6 +14,7 @@ class Message(models.Model):
         default=uuid.uuid4, primary_key=True, editable=False)
     message_content = models.TextField("メッセージ内容", max_length=600)
 
+    # profileの主キーはよろずIDなので、profileをリレーションしていということは、yorozu_idとリレーションしている
     sender_yorozu_id = models.ForeignKey(
         "Profile", verbose_name="送信者", on_delete=models.CASCADE, related_name="sender", default="")
 

@@ -45,7 +45,7 @@ class PlanListCreateAPIView(views.APIView):
             # ----------------------------------------------------------------------
             # serializer.data
 
-            return Response("プラン登録成功")
+            return Response("プラン登録成功", status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

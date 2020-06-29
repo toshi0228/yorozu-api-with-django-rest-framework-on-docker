@@ -8,7 +8,7 @@ from ..serializers.serializer_message import MessageSerializer
 
 
 class MessageListCreateAPIView(views.APIView):
-    '''メッセージの送信したメッセージ一覧とメッセージ作成APIクラス'''
+    '''自分自身が送信したメッセージの一覧とメッセージ作成APIクラス'''
     # この設定があることで、jwtを持っていないと入れない
     permission_classes = (IsAuthenticated,)
 
@@ -28,7 +28,8 @@ class MessageListCreateAPIView(views.APIView):
         serializer = MessageSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data,status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
         print("登録失敗")
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
 
