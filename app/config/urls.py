@@ -15,3 +15,9 @@ urlpatterns = [
 
 # http://127.0.0.1:8081/api/auth/jwt/createに
 # メールアドレスとpasswordを送るとトークンが帰ってくる
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)に関して 2020 630
+# settings.MEDIA_URL => メディアのURL
+# document_root=settings.MEDIA_ROOT => メディアがある場所
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

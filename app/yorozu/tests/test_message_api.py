@@ -14,8 +14,6 @@ from yorozu.serializers.serializer_message import MessageSerializer
 MESSAGE_URL = reverse('yorozu:sent-message-list')
 
 
-# def sample_message(self)
-
 class PublicMessageListCreateApiTests(TestCase):
     """JWTを持っていないユーザーは、取得に失敗するかテストする"""
 

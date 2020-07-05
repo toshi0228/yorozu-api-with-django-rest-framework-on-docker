@@ -25,6 +25,13 @@ urlpatterns = [
          name='sent-message-list'),
     path('messagebox/', message.MessageInBoxListAPIView.as_view()),
     path('review/', review.ReviewListAPIView.as_view()),
+
+    path('review/<pk>', review.ReviewRetrieveAPIView.as_view()),
+
+    # path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
+
+
+
     path('tag/', tag.TagListAPIView.as_view(), name='tag-list'),
     path('contract/', contract.ReceiveContractListCreateAPIView.as_view()),
     path('contract/me/', contract.MySentContractListAPIView.as_view()),
