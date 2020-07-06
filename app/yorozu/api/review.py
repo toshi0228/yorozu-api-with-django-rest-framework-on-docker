@@ -57,11 +57,15 @@ class ReviewRetrieveAPIView(views.APIView):
     '''プランページに移動した時に、よろずやのレビューの点数を取得する'''
 
     def get(self, request, pk):
+        print("----------------kiteruaaaaaaaaa")
+        print(pk)
 
         recieve_review_list = Review.objects.filter(
             receiver_yorozu_id=pk)
         # レビュがある場合は,true
         if recieve_review_list:
+            print("----------------kiteru")
+
             positive_score = []
             negative_score = []
 

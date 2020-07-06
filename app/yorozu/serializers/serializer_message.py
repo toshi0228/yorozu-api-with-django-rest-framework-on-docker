@@ -11,7 +11,7 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
 
         fields = ("id", "sender_yorozu_id", "receiver_yorozu_id",
-                  "message_content", "sender_profile", "is_read", "created_at", "updated_at")
+                  "message_content", "sender_profile", "unread", "created_at", "updated_at")
 
     def get_sender_profile(self, instance):
         '''送信者のプロフィールを取り出す'''

@@ -33,6 +33,22 @@ class MessageListCreateAPIView(views.APIView):
         print("登録失敗")
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
 
+    def patch(self, request):
+        """メッセージの未読を既読にする処理"""
+
+        queryset = Message.objects.get(id=request.data['id'])
+
+        # partial=Trueがあることで、引数dataで渡した値のみが更新されるようになる
+        serializer = MessageSerializer(
+            instance=queryset, data=request.data, partial=True)
+
+        # is_valid()をしないと、データは取得できない
+        if serializer.is_valid():
+            # patchで変更しても、saveしないとserializer.dataの値は反映されない
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response("メッセージの既読処理の失敗", status=status.HTTP_400_BAD_REQUEST)
+
 
 class MessageInBoxListAPIView(views.APIView):
     '''自分に届いたメッセージリスト表示するAPI'''
@@ -56,7 +72,7 @@ class MessageInBoxListAPIView(views.APIView):
 
 
 # ==================================================================
-# self.request.userに関して　2020 5 30
+# self.request.userに関して 2020 5 30
 # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
 # self.request.user.profile.yorozu_idは、self.request.userで
 # ユーザーを取り出し、そのあと、リレーションしているプロフィールモデルから、

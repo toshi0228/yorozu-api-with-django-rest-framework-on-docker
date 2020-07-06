@@ -21,7 +21,9 @@ class Message(models.Model):
     receiver_yorozu_id = models.ForeignKey(
         "Profile", verbose_name="受信者", on_delete=models.CASCADE, related_name="receiver", default="")
 
-    is_read = models.BooleanField(verbose_name='既読判定', default=False,)
+    # is_read = models.BooleanField(verbose_name='既読判定', default=False,)
+
+    unread = models.BooleanField(verbose_name='未読判定(未読ならTrue)', default=True)
 
     created_at = models.DateTimeField("作成日", default=timezone.now)
     updated_at = models.DateField("更新日", auto_now=True)
