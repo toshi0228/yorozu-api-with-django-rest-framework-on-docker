@@ -25,7 +25,8 @@ class ProfileSerializer(serializers.ModelSerializer):
             "yorozuya_name",
             "profile_image",
             "profile_description",
-            "plan_thumbnail_image",
+            # "plan_thumbnail_image",
+            "yorozuya_thumbnail_image",
             "score",
             "plan_list",
         )
@@ -79,7 +80,8 @@ class PostProfileSerializer(serializers.Serializer):
     nickname = serializers.CharField(max_length=255)
     yorozuya_name = serializers.CharField(max_length=255)
     profile_image = serializers.ImageField(default="")
-    plan_thumbnail_image = serializers.ImageField(default="")
+    # plan_thumbnail_image = serializers.ImageField(default="")
+    yorozuya_thumbnail_image = serializers.ImageField(default="")
     profile_description = serializers.CharField(max_length=255)
     # review_score = serializers.IntegerField(default=0)
     # twitter_account = serializers.CharField(max_length=255, default="")

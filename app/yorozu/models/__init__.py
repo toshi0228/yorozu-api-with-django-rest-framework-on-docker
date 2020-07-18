@@ -11,6 +11,7 @@ from .tag import Tag
 from .message import Message
 from .review import Review
 from .contract import Contract
+from .payment import Payment
 
 
 # from .plan import Profile
