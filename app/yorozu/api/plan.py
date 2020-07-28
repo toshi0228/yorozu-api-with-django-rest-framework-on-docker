@@ -1,7 +1,8 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status, views
 from ..models import Plan
 from rest_framework.response import Response
-from ..serializers.serializer_plan import PlanSerializer, PlanPostSerializer
+from ..serializers.serializer_plan import PlanSerializer, PlanPostSerializer, PlanPatchSerializer
 
 # ===================================================================
 # プラン作成に関して、タグがリストのため、views.APIViewを使う
@@ -43,15 +44,33 @@ class PlanListCreateAPIView(views.APIView):
             # serializer.dataで、インスタンスを辞書型で取り出せるが、PlanPostSerializerで
             # 定義したタグがモデルではarrayだが、stringで定義しているのでうまくできない
             # ----------------------------------------------------------------------
-            # serializer.data
 
-            return Response("プラン登録成功", status=status.HTTP_201_CREATED)
+            # 本当は、登録したプランをreturnしたいが、上手くいかないのでyrozuIdだけ渡す
+            return Response(request.data['yorozuya_profile_id'], status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# class PlanView(views.APIView):
-#     serializer_class = PlanPostSerializer
+class PlanUpdateAPIView(views.APIView):
+    """プランの一部更新するAPI"""
 
-#     def get(self, request, *args, **kwargs):
-#         return Response({"message": "planリストはviews_planでリクエスト処理をする"})
+    def patch(self, request, pk):
+
+        # プランオブジェクトを取得
+        plan = get_object_or_404(Plan, pk=pk)
+
+        # シリアライザーの初期値と、更新したいデータ、partial=Trueの3点セットで値が部分的に更新される
+        serializer = PlanPatchSerializer(
+            instance=plan, data=request.data, partial=True)
+
+        # serializer.save()を行うと、seriarizerのupdateメソッドが動く
+        # is_valid()を行なったあとでないと、save()はできない
+        if serializer.is_valid():
+            serializer.save()
+
+            # 本当は、登録したプランをreturnしたいが、上手くいかないのでplan_idだけ渡す
+            return Response(pk, status=status.HTTP_200_OK)
+
+        # serializer.is_valid()
+        # print(serializer.data)
+        return Response('NG', status=status.HTTP_400_BAD_REQUEST)

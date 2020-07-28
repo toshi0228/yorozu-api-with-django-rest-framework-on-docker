@@ -22,7 +22,6 @@ class ProfileListCreateAPIView(views.APIView):
 
         # PostProfileSerializerで型チェックを行う
         serializer = PostProfileSerializer(data=request.data)
-        print(request.data)
 
         if serializer.is_valid():
             # sserializer.saveで,ProfileSerializerのclassでオーバライドさせておいたcreateメソッドが動く
@@ -48,12 +47,29 @@ class ProfileListCreateAPIView(views.APIView):
 
 
 class ProfileRetrieveAPIView(views.APIView):
-    '''プロフィールの詳細ページ'''
+    '''プロフィールの詳細ページ, 修正を行う'''
 
     def get(self, request, pk):
         profile = get_object_or_404(Profile, pk=pk)
         serializer = ProfileSerializer(instance=profile)
         return Response(serializer.data, status.HTTP_200_OK)
+
+    def patch(self, request, pk):
+        '''プロフィールの一部を修正するメソッド'''
+
+        print("-------------------")
+        print(request.data)
+
+        profile = get_object_or_404(Profile, pk=pk)
+        serializer = ProfileSerializer(
+            instance=profile, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            # saveした後に、ちゃんとserializer.dataの値が変更される
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            Response("プロフィールの更新失敗", status=status.HTTP_400_BAD_REQUEST)
 
 
 class SearchProfileAPIView(views.APIView):
@@ -185,4 +201,12 @@ class SearchProfileAPIView(views.APIView):
     # __containsに関して 2020 6 25
     # name__contains = "みかん" であれば「有田みかん」「美味しいみかんジュース」などが返ります
     # ex) Product.objects.filter(name__contains="みかん", price__gte=100)
+    # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+    # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+    # get_object_or_404 2020 7 22
+    # Djangoのショートカット関数と呼ばれるものの一つで、モデルに対してget()を呼び出して
+    # オブジェクトを1件取得する
+    # モデルが見つからない場合には、django.http.Http404を送信して画面が
+    # Page not found(404)ページに遷移される
     # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

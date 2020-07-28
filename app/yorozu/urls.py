@@ -21,6 +21,7 @@ urlpatterns = [
     # path('profile/search/', profile.SearchProfileAPIView.as_view()),
     path('search/profile/', profile.SearchProfileAPIView.as_view()),
     path('plan/', plan.PlanListCreateAPIView.as_view(), name='plan'),
+    path('plan/<pk>/', plan.PlanUpdateAPIView.as_view()),
     path('message/', message.MessageListCreateAPIView.as_view(),
          name='sent-message-list'),
     path('messagebox/', message.MessageInBoxListAPIView.as_view()),

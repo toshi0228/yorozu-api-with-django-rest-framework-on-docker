@@ -56,5 +56,22 @@ class Tag(models.Model):
             tags.append(Tag.get_or_create(tag))
         return tags
 
+    # postメソッドで使うmulti_get_or_createと同じだがもう少し綺麗に書き換えてみる 2020 7 28
+    @classmethod
+    def get_or_create_on_patch(cls, validated_data):
+        """patchした時に、動くメソッド タグがあれば取得なければ作成"""
+
+        # validated_data => 記念日,インスターグラマー
+        # 記念日,インスターグラマー => ['インスターグラマー', '記念日']
+        tag_list = validated_data.split(",")
+
+        tags = []
+        for tag in tag_list:
+            # 入力されたタグからタグを作成する
+            tags.append(Tag.get_or_create(tag))
+
+        # tags => [<Tag: 記念日>, <Tag: インスターグラマー>]
+        return tags
+
     def __str__(self):
         return self.name

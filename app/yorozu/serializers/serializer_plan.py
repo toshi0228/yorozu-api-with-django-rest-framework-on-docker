@@ -55,13 +55,46 @@ class PlanPostSerializer(serializers.Serializer):
         # print(plan.tags.all())
         return plan
 
-# ===================================================================
-# 2020 4 29
-# djangoは、自動でモデルが追加される。idがプライマリーキー(pk)になる
-# ===================================================================
 
+class PlanPatchSerializer(serializers.Serializer):
 
-# ===================================================================
-# プラン作成に関して、modelserializerを使いたいが、modelserializerを使うと
-# tagに関して、型チェックでエラーが起きてしますのでdefaultのserializerを使う
-# ===================================================================
+    title = serializers.CharField(max_length=15)
+    description = serializers.CharField(max_length=255)
+    image = serializers.ImageField(default="")
+    price = serializers.IntegerField(default=0)
+    # ダミータグ タグはクライアントから['タグ1, タグ2']という文字列で送られてくる 画像と一緒につくられるため
+    tag = serializers.CharField(max_length=255)
+    yorozuya_profile_id = serializers.CharField(max_length=255)
+
+    def update(self, instance, validated_data):
+
+        # validated_data => {'price': 1111, 'tag': '記念日,インスターグラマー'}
+        # validated_dataは、上記で定義したserializers.CharFieldの値と同じ名前のものだけを
+        # HTTPリクエストされた時に受け取ることができる
+
+        # validated_dataに、タグがある場合、ない場合で try except
+        try:
+            # validated_data['tag'] => 記念日,インスターグラマー
+            update_tag = validated_data['tag']
+            # タグモデルのクラスメソッド タグがあれば取得して、なければ作成
+            # tag_list => [<Tag: 記念日>, <Tag: インスターグラマー>]
+            tag_list = Tag.get_or_create_on_patch(update_tag)
+
+            instance.tags.set(tag_list)
+            # print("この中身が知りたい")
+            # print(updata_plan.tags.all())
+
+            return instance
+        except:
+            # このreturnは, api側のファイルでsaveして、それからseriarizer.dataで取り出す値
+            return ""
+
+        # ===================================================================
+        # 2020 4 29
+        # djangoは、自動でモデルが追加される。idがプライマリーキー(pk)になる
+        # ===================================================================
+
+        # ===================================================================
+        # プラン作成に関して、modelserializerを使いたいが、modelserializerを使うと
+        # tagに関して、型チェックでエラーが起きてしますのでdefaultのserializerを使う
+        # ===================================================================

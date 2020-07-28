@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 # トップレベルに書く「名前付きvolumes」は複数サービスから参照できる
 volumes:
@@ -21,6 +21,8 @@ services:
     # command: gunicorn --bind 0.0.0.0:8081 config.wsgi
     #デプロイ用
     # command: gunicorn --bind 0.0.0.0:3031 config.wsgi
+    env_file:
+      - .env
     environment:
       - DB_HOST=db
       - DB_NAME=app
@@ -50,7 +52,6 @@ services:
       - ./nginx:/etc/nginx/conf.d
       - static_data:/static
       - ./app/media:/media
-
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # リクエストの流れ 2020 5 27
 # nginx:
@@ -69,7 +70,7 @@ services:
 
 # nginx:
 #   volumes:
-    # - ./nginx:/etc/nginx/conf.d
+# - ./nginx:/etc/nginx/conf.d
 
 # nginxのコンテナの/nginx:/etc/nginx/conf.dというディレクトリの中には、
 # default.confというものがあるが、ここを./nginx/app.confのファイルとバインドマウント
@@ -80,15 +81,12 @@ services:
 # ./nginx:/etc/nginx/conf.dで書いた設定ファイルが元の設定ファイルに上書きされる
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
-
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # nginxの不思議
 # dockerでstaticをvolumeすると、50x.html index.htmlも勝手にできる 謎だ,,
 # ちなみに以下のようなバインドマウントの場合は、そのような現象は起きない
 # - static_data:/media
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-
-
 
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # volumeに関して
@@ -265,4 +263,13 @@ services:
 
 # 未使用のVolumeを一括削除
 # docker volume prune
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
+
+# env_fileとenvironmentの使い分け
+
+# env_fileは、外部ファイルに環境変数を定義して、読み込む
+# environmentは、コンテナでしか使わない環境変数を定義する時に
+
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝

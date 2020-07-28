@@ -1,3 +1,4 @@
+import os
 import stripe
 from rest_framework import views, status
 from rest_framework.response import Response
@@ -21,14 +22,17 @@ class PaymentAPIView(views.APIView):
         print(request.data)
         print(request.data['id'])
 
-        stripe.api_key = 'sk_test_51H2sQ2Ac2aWSlNWdA2rUorhrE5g7ZayjYqjx1Fg4WE3ma8z4vxUJSGe6e54reqmbJvEfp9MkvcLX3ALU6MpKVZpE00gJOC7eMZ'
+        # これを先にstripeに渡さないとエラーになってしまう
+        stripe.api_key = os.environ.get('STRIPE_KEY')
 
         # token = 'pk_test_51H2sQ2Ac2aWSlNWdWo97wMYthmjx2goPgJOXscnmHSOYRjGSBOgEpj6jn2JIIXhILpRvlDSgEOMUqk1Fs0f0fPoe00rUKABZcB'
-        # customer = stripe.Customer.create(
-        #     email='etoshi0228@gmail.com', source=request.data['id'])
+        customer = stripe.Customer.create(email='etoshi0228@gmail.com')
+        # print("customer表示ーーーーーーー")
+        # print(customer.id)
+        # email='etoshi0228@gmail.com', source=request.data['id'])
 
         intent = stripe.PaymentIntent.create(
-            # customer=customer.id,
+            customer=customer.id,
             amount=request.data['price'],
             currency='JPY',
             # payment_method_types=request.data['card'],
@@ -39,15 +43,5 @@ class PaymentAPIView(views.APIView):
             receipt_email='etoshi0228@gmail.com',
             confirm=True,
         )
-
-        print(intent)
-
-        # stripe.Charge.create(
-        #     customer=customer.id,
-        #     amount=2600,
-        #     currency='JPY',
-        #     description='○○プラン',
-        #     receipt_email='etoshi0228@gmail.com',
-        # )
 
         return Response("ポスト処理成功")
