@@ -51,8 +51,15 @@ class PlanListCreateAPIView(views.APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class PlanUpdateAPIView(views.APIView):
+class PlanRetrieveUpdateAPIView(views.APIView):
     """プランを更新するAPI(タグは更新されない)"""
+
+    def get(self, request, pk):
+        '''プランの取得'''
+
+        plan = get_object_or_404(Plan, pk=pk)
+        serializer = PlanSerializer(instance=plan)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk):
         # プランオブジェクトを取得
