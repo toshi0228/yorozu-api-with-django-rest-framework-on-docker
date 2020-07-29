@@ -4,6 +4,7 @@ from .serializer_tag import TagSerializer
 
 
 class PlanSerializer(serializers.ModelSerializer):
+    """planの取得と更新(tagを除く)を行うシリアライザー"""
 
     # 以下のようにすることで、ネストした値を受け取ることができる
     tags = TagSerializer(many=True, read_only=True)
@@ -56,7 +57,8 @@ class PlanPostSerializer(serializers.Serializer):
         return plan
 
 
-class PlanPatchSerializer(serializers.Serializer):
+class PlanTagPatchSerializer(serializers.Serializer):
+    """プランのtagのみを変更するために使うshiriarizer"""
 
     title = serializers.CharField(max_length=15)
     description = serializers.CharField(max_length=255)
@@ -87,7 +89,7 @@ class PlanPatchSerializer(serializers.Serializer):
             return instance
         except:
             # このreturnは, api側のファイルでsaveして、それからseriarizer.dataで取り出す値
-            return ""
+            return instance
 
         # ===================================================================
         # 2020 4 29

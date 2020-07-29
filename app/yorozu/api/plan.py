@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status, views
 from ..models import Plan
 from rest_framework.response import Response
-from ..serializers.serializer_plan import PlanSerializer, PlanPostSerializer, PlanPatchSerializer
+from ..serializers.serializer_plan import PlanSerializer, PlanPostSerializer, PlanTagPatchSerializer
 
 # ===================================================================
 # プラン作成に関して、タグがリストのため、views.APIViewを使う
@@ -52,7 +52,32 @@ class PlanListCreateAPIView(views.APIView):
 
 
 class PlanUpdateAPIView(views.APIView):
-    """プランの一部更新するAPI"""
+    """プランを更新するAPI(タグは更新されない)"""
+
+    def patch(self, request, pk):
+        # プランオブジェクトを取得
+        plan = get_object_or_404(Plan, pk=pk)
+
+        # シリアライザーの初期値と、更新したいデータ、partial=Trueの3点セットで値が部分的に更新される
+        serializer = PlanSerializer(
+            instance=plan, data=request.data, partial=True)
+
+        # serializer.save()を行うと、seriarizerのupdateメソッドが動く
+        # is_valid()を行なったあとでないと、save()はできない
+        if serializer.is_valid():
+            serializer.save()
+
+            # 本当は、登録したプランをreturnしたいが、上手くいかないのでplan_idだけ渡す
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response('プランの更新失敗', status=status.HTTP_400_BAD_REQUEST)
+
+
+# タグとプランで更新は別々
+# 本来なら、seriarizerをモデルで行いたいが、画像があるせいでタグが配列なのに文字列で送られてしまうので
+# tagはタグのupdateを作成する それ以外はmodel.serializerを使って更新する
+class PlanTagUpdateAPIView(views.APIView):
+    """プランのタグを更新するAPI"""
 
     def patch(self, request, pk):
 
@@ -60,7 +85,7 @@ class PlanUpdateAPIView(views.APIView):
         plan = get_object_or_404(Plan, pk=pk)
 
         # シリアライザーの初期値と、更新したいデータ、partial=Trueの3点セットで値が部分的に更新される
-        serializer = PlanPatchSerializer(
+        serializer = PlanTagPatchSerializer(
             instance=plan, data=request.data, partial=True)
 
         # serializer.save()を行うと、seriarizerのupdateメソッドが動く
@@ -71,6 +96,4 @@ class PlanUpdateAPIView(views.APIView):
             # 本当は、登録したプランをreturnしたいが、上手くいかないのでplan_idだけ渡す
             return Response(pk, status=status.HTTP_200_OK)
 
-        # serializer.is_valid()
-        # print(serializer.data)
-        return Response('NG', status=status.HTTP_400_BAD_REQUEST)
+        return Response('プランの更新失敗', status=status.HTTP_400_BAD_REQUEST)
