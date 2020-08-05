@@ -65,7 +65,8 @@ class PlanTagPatchSerializer(serializers.Serializer):
     image = serializers.ImageField(default="")
     price = serializers.IntegerField(default=0)
     # ダミータグ タグはクライアントから['タグ1, タグ2']という文字列で送られてくる 画像と一緒につくられるため
-    tag = serializers.CharField(max_length=255)
+    # allow_blank=Trueで、更新する時に空白でもエラーが起きないようになる
+    tag = serializers.CharField(max_length=255, allow_blank=True)
     yorozuya_profile_id = serializers.CharField(max_length=255)
 
     def update(self, instance, validated_data):

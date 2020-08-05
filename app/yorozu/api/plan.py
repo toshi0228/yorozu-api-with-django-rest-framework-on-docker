@@ -62,6 +62,7 @@ class PlanRetrieveUpdateAPIView(views.APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk):
+
         # プランオブジェクトを取得
         plan = get_object_or_404(Plan, pk=pk)
 
