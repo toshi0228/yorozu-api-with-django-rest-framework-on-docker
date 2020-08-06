@@ -162,9 +162,15 @@ MIDDLEWARE = [
 # 許可するオリジン
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
-    'http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com'
+    'http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com',
+    'https://master.d2fm4uehes234b.amplifyapp.com/',
 ]
 
+# S3で作ったもの
+# http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com
+
+# amplifyで作ったreactからのリクエスト 2020 8 6
+# https://master.d2fm4uehes234b.amplifyapp.com/
 
 ROOT_URLCONF = 'config.urls'
 
