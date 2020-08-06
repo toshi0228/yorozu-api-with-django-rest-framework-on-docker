@@ -67,7 +67,7 @@ INSTALLED_APPS = [
 #     'http://localhost:3000',
 # ]
 
-# pip install django-core-headers
+# pip install django-cors-headers
 # ============================================================
 
 
@@ -163,7 +163,7 @@ MIDDLEWARE = [
 CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com',
-    'https://master.d2fm4uehes234b.amplifyapp.com/',
+    'http://master.d2fm4uehes234b.amplifyapp.com',
 ]
 
 # S3で作ったもの
