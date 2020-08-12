@@ -164,16 +164,15 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com',
     'https://master.d2d37zjyto88nt.amplifyapp.com',
+    'http://yourozu.work',
 ]
 
 # S3で作ったもの
 # http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com
 
 # amplifyで作ったreactからのリクエスト 2020 8 6
-# https://master.d2fm4uehes234b.amplifyapp.com/ =>  NG
-# https://master.d2fm4uehes234b.amplifyapp.com =>   OK
+# https://master.d2fm4uehes234b.amplifyapp.com
 
-# 最後のスラッシュには、気をつけないといけない
 # CORS_ORIGIN_WHITELISTは、react側のホスト名が入る
 
 
