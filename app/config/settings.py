@@ -27,7 +27,7 @@ SECRET_KEY = 'g-*=ffi7auc(@po$_q3#n6e&xg%h^r^v4t!5hgoh2o6$#@or08'
 DEBUG = True
 
 # ec2用
-ALLOWED_HOSTS = ["54.178.94.145"]
+ALLOWED_HOSTS = ["54.178.94.145", 'http://yourozu.work']
 
 # localhost用
 # ALLOWED_HOSTS = []
@@ -164,7 +164,6 @@ CORS_ORIGIN_WHITELIST = [
     'http://localhost:3000',
     'http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com',
     'https://master.d2d37zjyto88nt.amplifyapp.com',
-    'http://yourozu.work',
 ]
 
 # S3で作ったもの
