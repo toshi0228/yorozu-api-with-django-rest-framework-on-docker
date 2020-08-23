@@ -21,13 +21,13 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g-*=ffi7auc(@po$_q3#n6e&xg%h^r^v4t!5hgoh2o6$#@or08'
+SECRET_KEY = os.environ.get('DJANGO_SETTINGS_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 # ec2用
-ALLOWED_HOSTS = ["54.178.94.145", 'www.yourozu.work']
+ALLOWED_HOSTS = ["54.178.94.145", 'yourozu.work', 'localhost']
 
 # localhost用
 # ALLOWED_HOSTS = []
@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'djoser',
     'yorozu',
-    'corsheaders'
+    'corsheaders',
+    'storages'
 ]
 
 
@@ -121,6 +122,13 @@ AUTH_USER_MODEL = 'yorozu.Account'
 # }
 # ============================================================
 
+# ============================================================
+# storages 2020 8 20
+# django-storagesはクラウドストレージを
+# メディアファイルの保存先に使うためのパッケージ
+# ============================================================
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         # Simple JWTの読み込み
@@ -166,7 +174,7 @@ CORS_ORIGIN_WHITELIST = [
     'https://master.d2d37zjyto88nt.amplifyapp.com',
 ]
 
-# S3で作ったもの
+# S3で作ったもの 2020 8 23 現在は、あまり使わないかもしれない
 # http://yorozu-static.s3-website-ap-northeast-1.amazonaws.com
 
 # amplifyで作ったreactからのリクエスト 2020 8 6
@@ -281,3 +289,34 @@ STATIC_URL = '/static/'
 # 集約用の管理コマンド「manage.py collectstatic」を実行した時に、
 # staticファイルがコピーされるディレクトリのパス
 # ============================================================
+
+
+# django-storagesの設定 s3に保存するために必要
+
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'yourozu'
+
+
+# ================================================================
+# s3に画像を保存する時に必要なこと 2020  8 22
+# ・pip install boto3
+# ・django-storages
+
+# boto3 => awsをプログラムで使うもの
+# django-storages => s3から、静的ファイルを配信できるようにするために必要
+
+# INSTALLED_APPS = [
+#     'storages' => 追加
+# ]
+
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# =>画像データをs3にするために必要
+
+# STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+# =>css,jsをs3に登録するために必要
+
+# ================================================================
