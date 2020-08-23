@@ -1,5 +1,5 @@
 boto3==1.14.46
-Django==2.2.2
+Django==2.2.13
 django-allauth==0.41.0
 django-cors-headers==3.2.1
 django-filter==2.2.0
