@@ -40,6 +40,14 @@ class Profile(models.Model):
         # 送信者のプロフィールから、プロフィール画像を取り出す
         return sender_profile
 
+    @classmethod
+    def get_contract_yorozuya_prfofile_image(cls, ContractInstance):
+        # 送信者のyorozu_idから,送信者のプロフィールを持ってくる
+        contract_yorozuya_profile = cls.objects.filter(
+            yorozu_id=ContractInstance.receiver_yorozu_id.yorozu_id).first()
+        # 送信者のプロフィールから、プロフィール画像を取り出す
+        return contract_yorozuya_profile
+
     def __str__(self):
         # タイトルの名前を押して詳細に入ったときの名前を変更できる
         # return self.yorozuya_name

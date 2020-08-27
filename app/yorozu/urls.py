@@ -32,11 +32,10 @@ urlpatterns = [
 
 
     # path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),
-
-
-
     path('tag/', tag.TagListAPIView.as_view(), name='tag-list'),
+    # 自分のプランを購入してくれたリスト
     path('contract/', contract.ReceiveContractListCreateAPIView.as_view()),
+    # 自分がプランを購入してリスト(課金している人)
     path('contract/me/', contract.MySentContractListAPIView.as_view()),
 ]
 

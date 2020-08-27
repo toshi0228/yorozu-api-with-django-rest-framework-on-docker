@@ -9,7 +9,7 @@ from ..serializers.serializer_contract import GetContractSerializer, PostContrac
 
 
 class ReceiveContractListCreateAPIView(views.APIView):
-    """自分宛に届いたプラン契約してくれたお客さんおリストの表示と作成"""
+    """自分のプランを契約してくれたお客さんリストの表示と作成"""
 
     # この設定があることで、jwtを持っていないと入れない
     permission_classes = (IsAuthenticated,)
