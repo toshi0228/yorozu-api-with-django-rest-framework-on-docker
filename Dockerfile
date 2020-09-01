@@ -45,6 +45,8 @@ WORKDIR /app
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # psycopg2-binaryをインストールするために
 
+# postgresql-devで、postgresqlの実行環境を整えてくれる
+
 # RUN apk update  \ 
 #     && apk add postgresql-dev
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
