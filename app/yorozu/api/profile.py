@@ -57,9 +57,6 @@ class ProfileRetrieveAPIView(views.APIView):
     def patch(self, request, pk):
         '''プロフィールの一部を修正するメソッド'''
 
-        print("-------------------")
-        print(request.data)
-
         profile = get_object_or_404(Profile, pk=pk)
         serializer = ProfileSerializer(
             instance=profile, data=request.data, partial=True)

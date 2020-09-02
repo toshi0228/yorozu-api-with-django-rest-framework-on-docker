@@ -17,19 +17,13 @@ class PaymentAPIView(views.APIView):
         return Response("ペイメント処理")
 
     def post(self, request):
-        print("----------------------------------")
-        print("ストライプに関して")
-        print(request.data)
-        print(request.data['id'])
 
         # これを先にstripeに渡さないとエラーになってしまう
         stripe.api_key = os.environ.get('STRIPE_KEY')
 
-        # token = 'pk_test_51H2sQ2Ac2aWSlNWdWo97wMYthmjx2goPgJOXscnmHSOYRjGSBOgEpj6jn2JIIXhILpRvlDSgEOMUqk1Fs0f0fPoe00rUKABZcB'
+        # これでストライプ用の顧客情報を作成することができる
+        # (あとでemailに関しては、編集 meta情報も追加した方が良いかもしれない)
         customer = stripe.Customer.create(email='etoshi0228@gmail.com')
-        # print("customer表示ーーーーーーー")
-        # print(customer.id)
-        # email='etoshi0228@gmail.com', source=request.data['id'])
 
         intent = stripe.PaymentIntent.create(
             customer=customer.id,

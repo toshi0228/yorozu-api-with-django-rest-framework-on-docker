@@ -1,5 +1,7 @@
 version: "3"
 
+# 開発用
+
 # トップレベルに書く「名前付きvolumes」は複数サービスから参照できる
 volumes:
   postgres_data:
@@ -24,11 +26,10 @@ services:
     env_file:
       - .env
     environment:
-      # - DB_HOST=db
-      - DB_HOST=db
-      - DB_NAME=app
-      - DB_USER=postgres
-      - DB_PASS=password
+      - DB_HOST=${DB_HOST_DEVELOP}
+      - DB_NAME=${DB_NAME_DEVELOP}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASSWORD}
     depends_on:
       - db
   db:
@@ -39,9 +40,10 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
+      # environmentに以下の設定をしておくことで、postgresの初期値ユーザーを登録することができる
       - POSTGRES_DB=app
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
   nginx:
     image: nginx
@@ -56,7 +58,7 @@ services:
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # リクエストの流れ 2020 5 27
 # nginx:
-#   ports: 　　
+#   ports:
 #     - 8000:80
 #以下の8000というポートがブラウザーから最初にリクエストされるポート
 # nginxコンテナがポート8000を開け、そこにリクエストがきたら、コンテナの中のnginxの80
@@ -67,7 +69,7 @@ services:
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-# nginxの設定に関して　　2020 5 27
+# nginxの設定に関して 2020 5 27
 
 # nginx:
 #   volumes:

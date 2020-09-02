@@ -1,6 +1,7 @@
 version: "3"
 
 # トップレベルに書く「名前付きvolumes」は複数サービスから参照できる
+# 本番用 docker-compose.yml
 volumes:
   postgres_data:
   static_data:
@@ -10,8 +11,6 @@ services:
   app:
     build:
       context: .
-    # ports:
-    #   - 8000:8081
     expose:
       - 3031
     volumes:
@@ -24,34 +23,12 @@ services:
     env_file:
       - .env
     environment:
-      # - DB_HOST=db
-      - DB_HOST=aws-and-infra-web.czsrknm72yeq.ap-northeast-1.rds.amazonaws.com
-      # - DB_NAME=app
-      - DB_NAME=RDB
-      # - DB_NAME=aws-and-infra-web
-      - DB_USER=postgres
-      - DB_PASS=password
-      # - POSTGRES_USER=postgres
-      # - POSTGRES_PASSWORD=password
-
-
-    # ports:
-    # - 5432:5432
-
-    # depends_on:
-    #   - aws-and-infra-web.czsrknm72yeq.ap-northeast-1.rds.amazonaws.com
-
-  # db:
-  #   # image: postgres:10-alpine
-  #   image: postgres
-  #   ports:
-  #     - 5432:5432
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   environment:
-  #     - POSTGRES_DB=app
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=password
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
   nginx:
     image: nginx

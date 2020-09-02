@@ -29,8 +29,6 @@ class ReviewListAPIView(views.APIView):
 
     def patch(self, request):
         """よろずやがリクエストを承認したら,is_approvalをfalseからTrueに変更する"""
-        print("上書き処理ーーーーーーーーーーーーーーー")
-        print(request.data)
 
         # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
         yorozu_id = self.request.user.profile.yorozu_id
@@ -57,14 +55,11 @@ class ReviewRetrieveAPIView(views.APIView):
     '''プランページに移動した時に、よろずやのレビューの点数を取得する'''
 
     def get(self, request, pk):
-        print("----------------kiteruaaaaaaaaa")
-        print(pk)
 
         recieve_review_list = Review.objects.filter(
             receiver_yorozu_id=pk)
         # レビュがある場合は,true
         if recieve_review_list:
-            print("----------------kiteru")
 
             positive_score = []
             negative_score = []
