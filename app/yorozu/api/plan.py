@@ -62,6 +62,7 @@ class PlanRetrieveUpdateAPIView(views.APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def patch(self, request, pk):
+        '''プランの更新'''
 
         # プランオブジェクトを取得
         plan = get_object_or_404(Plan, pk=pk)
@@ -79,6 +80,16 @@ class PlanRetrieveUpdateAPIView(views.APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response('プランの更新失敗', status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        '''プランの削除'''
+
+        # モデルオブジェクトを取得
+        plan = get_object_or_404(Plan, pk=pk)
+        # モデルオブジェクトを削除
+        plan.delete()
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 # タグとプランで更新は別々
