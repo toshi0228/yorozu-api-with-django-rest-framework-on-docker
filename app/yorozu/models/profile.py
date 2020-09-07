@@ -33,10 +33,10 @@ class Profile(models.Model):
     updated_at = models.DateField("更新日", auto_now=True)
 
     @classmethod
-    def get_prfofile_image(cls, MessageInstance):
+    def get_prfofile_image(cls, profile):
         # 送信者のyorozu_idから,送信者のプロフィールを持ってくる
         sender_profile = cls.objects.filter(
-            yorozu_id=MessageInstance.sender_yorozu_id.yorozu_id).first()
+            yorozu_id=profile.yorozu_id).first()
         # 送信者のプロフィールから、プロフィール画像を取り出す
         return sender_profile
 
