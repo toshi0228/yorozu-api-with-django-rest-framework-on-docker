@@ -9,24 +9,28 @@ class GetContractSerializer(serializers.ModelSerializer):
 
     # 以下のようにすることで、ネストした値を受け取ることができる
     contract_plan = PlanSerializer(read_only=True)
+
     contract_yorozuya_profile = serializers.SerializerMethodField()
 
-    # 自分のプランを購入してくれた人のプロフィール
+    # # 自分のプランを購入してくれた人のプロフィール
     purchaser_profile = serializers.SerializerMethodField()
 
     class Meta:
         model = Contract
         # fields = '__all__'
         fields = ("sender_yorozu_id", "receiver_yorozu_id",
-                  "contract_plan", "is_approval", "contract_yorozuya_profile",  'purchaser_profile', "created_at", "updated_at")
+                  "contract_plan", "is_approval", "contract_yorozuya_profile", 'purchaser_profile', "created_at", "updated_at")
 
     def get_contract_yorozuya_profile(self, instance):
         '''自分が契約しているよろずやのプロフィール'''
 
-        # 引数instanceで受け取ったContractインスタンスをprofileモデルの関数に渡す。
+        # instance.receiver_yorozu_idで、送信者のprofileインスタンスを渡すことで、それに紐づいた情報が返ってくる
+        # messageインスタンスに、profileがリレーションしているので、
+        # instance.receiver_yorozu_idで、送信者のプロフィールインスタンスが返ってくる
+
         # 自分が契約しているよろずやのprofileを取得する
-        contract_yorozuya_profile = Profile.get_contract_yorozuya_prfofile_image(
-            instance)
+        contract_yorozuya_profile = Profile.get_prfofile_image(
+            instance.receiver_yorozu_id)
 
         # # 契約しているよろずやのプロフィールオブジェクトをシリアライザーに渡す
         serializers = ProfileSerializer(instance=contract_yorozuya_profile)
@@ -53,7 +57,7 @@ class GetContractSerializer(serializers.ModelSerializer):
         '''プランを購入してくれた人のプロフィール'''
 
         # 引数instanceで受け取ったMessageインスタンスをprofileモデルの関数に渡す。
-        sender_profile = Profile.get_prfofile_image(instance)
+        sender_profile = Profile.get_prfofile_image(instance.sender_yorozu_id)
 
         # # 送信者のプロフィールオブジェクトをシリアライザーに渡す
         serializers = ProfileSerializer(instance=sender_profile)
@@ -62,6 +66,7 @@ class GetContractSerializer(serializers.ModelSerializer):
             "nickname": serializers.data["nickname"],
             "profile_image": serializers.data["profile_image"],
         }
+
         return sender_profile
 
 

@@ -15,19 +15,22 @@ class ReceiveContractListCreateAPIView(views.APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
+
         try:
             # tokenがある場合、self.request.userでユーザー情報を取り出すことができる
             yorozu_id = self.request.user.profile.yorozu_id
             # 自分宛に契約のリクエストが来たデータを取り出す
             # .order_by('-created_at')で、フロント側で配列の最初に、新しいデータが入る
+
             queryset = Contract.objects.filter(
                 receiver_yorozu_id=yorozu_id).order_by('-created_at')
+
             # querysetはリスト(iterable)なので、引数にmany=Trueが必要
             serializer = GetContractSerializer(instance=queryset, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         except:
-            return Response("認証なし", status=status.HTTP_401_UNAUTHORIZED)
+            return Response("失敗", status=status.HTTP_401_UNAUTHORIZED)
 
     def post(self, request):
         # シリアライズしたい時は、引数のデータに値を入れる
@@ -35,7 +38,7 @@ class ReceiveContractListCreateAPIView(views.APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print("登録失敗")
+
         return Response("登録失敗", status=status.HTTP_400_BAD_REQUEST)
 
     def patch(self, request):

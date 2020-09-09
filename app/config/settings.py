@@ -300,6 +300,9 @@ AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = 'yourozu'
 
+# よくわからないが、書かないと読み込めない?
+# AWS_DEFAULT_ACL = None
+# AWS_DEFAULT_ACL = None
 
 # ================================================================
 # s3に画像を保存する時に必要なこと 2020  8 22

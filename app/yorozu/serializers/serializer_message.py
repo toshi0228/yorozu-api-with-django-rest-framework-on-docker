@@ -10,7 +10,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-
+        # fields = '__all__'
         fields = ("id", "sender_yorozu_id", "receiver_yorozu_id",
                   "message_content", "sender_profile", "receiver_profile", "unread", "created_at", "updated_at")
 
@@ -30,6 +30,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "yorozuya_name": serializers.data["yorozuya_name"],
             "profile_image": serializers.data["profile_image"],
         }
+
         return sender_profile
 
     def get_receiver_profile(self, instance):
@@ -46,6 +47,7 @@ class MessageSerializer(serializers.ModelSerializer):
             "yorozuya_name": serializers.data["yorozuya_name"],
             "profile_image": serializers.data["profile_image"],
         }
+
         return receiver_profile
 
 
