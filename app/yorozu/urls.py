@@ -29,6 +29,7 @@ urlpatterns = [
     path('review/', review.ReviewListAPIView.as_view()),
     path('review/<pk>', review.ReviewRetrieveAPIView.as_view()),
     path('payment/', payment.PaymentAPIView.as_view()),
+    path('payment/customer', payment.CreatePaymentCustomer.as_view()),
 
 
     # path('profile/<pk>/', profile.ProfileRetrieveAPIView.as_view()),

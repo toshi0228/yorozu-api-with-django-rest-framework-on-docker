@@ -4,6 +4,10 @@ from django.utils import timezone
 from .profile import Profile
 from .plan import Plan
 
+# contractとpyamentモデル違い
+# contract => ダッシュボードページなどで、データを管理
+# pyament =>  stripeを使ってカード情報を登録
+
 
 class Contract(models.Model):
     '''契約に関してのモデル'''
@@ -11,6 +15,7 @@ class Contract(models.Model):
     class Meta:
         verbose_name_plural = '契約'
 
+    # 契約ナンバー見たいなもの
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, editable=False)
 
     sender_yorozu_id = models.ForeignKey(
@@ -23,7 +28,8 @@ class Contract(models.Model):
         'Plan', verbose_name='契約をしたプラン', on_delete=models.CASCADE, related_name='contract_plan', default='')
 
     # リクエスト受信者(よろず屋)が承認したかどうか
-    is_approval = models.BooleanField(verbose_name='契約の承認状態', default=False)
+    is_approval = models.BooleanField(
+        verbose_name='契約の承認状態 (tureの時承認状態)', default=False)
 
     created_at = models.DateTimeField("作成日", default=timezone.now)
 
