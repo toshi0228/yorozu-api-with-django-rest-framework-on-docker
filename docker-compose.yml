@@ -1,8 +1,7 @@
 version: "3"
 
-# 開発用
-
 # トップレベルに書く「名前付きvolumes」は複数サービスから参照できる
+# 本番用 docker-compose.yml
 volumes:
   postgres_data:
   static_data:
@@ -12,36 +11,22 @@ services:
   app:
     build:
       context: .
-    # ports:
-    #   - 8000:8081
     expose:
       - 3031
     volumes:
       - ./app:/app
       - static_data:/app/static/
-    command: python3 manage.py runserver 0.0.0.0:3031
+    # command: python3 manage.py runserver 0.0.0.0:3031
     # command: gunicorn --bind 0.0.0.0:8081 config.wsgi
     #デプロイ用
-    # command: gunicorn --bind 0.0.0.0:3031 config.wsgi
+    command: gunicorn --bind 0.0.0.0:3031 config.wsgi
     env_file:
       - .env
     environment:
-      - DB_HOST=${DB_HOST_DEVELOP}
-      - DB_NAME=${DB_NAME_DEVELOP}
+      - DB_HOST=${DB_HOST}
+      - DB_NAME=${DB_NAME}
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASSWORD}
-    depends_on:
-      - db
-  db:
-    # image: postgres:10-alpine
-    image: postgres
-    ports:
-      - 5432:5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    environment:
-      # environmentに以下の設定をしておくことで、postgresの初期値ユーザーを登録することができる
-      - POSTGRES_DB=app
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
@@ -58,7 +43,7 @@ services:
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 # リクエストの流れ 2020 5 27
 # nginx:
-#   ports:
+#   ports: 　　
 #     - 8000:80
 #以下の8000というポートがブラウザーから最初にリクエストされるポート
 # nginxコンテナがポート8000を開け、そこにリクエストがきたら、コンテナの中のnginxの80
@@ -69,7 +54,7 @@ services:
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
 
 # ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝
-# nginxの設定に関して 2020 5 27
+# nginxの設定に関して　　2020 5 27
 
 # nginx:
 #   volumes:
