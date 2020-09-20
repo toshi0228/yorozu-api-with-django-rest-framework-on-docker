@@ -62,6 +62,10 @@ class CreatePaymentCustomer(views.APIView):
             # app_idに紐づいている、strpeから発行されたtokenを取り出す
             queryset = Payment.objects.filter(app_id=app_id).first()
 
+            # もしまだ,PaymentMethodIdなど登録したことがなければ空白を返す
+            if queryset is None:
+                return Response("")
+
             # querysetはリスト(iterable)の場合は、引数にmany=Trueが必要
             serializer = PaymentSerializer(instance=queryset)
 
