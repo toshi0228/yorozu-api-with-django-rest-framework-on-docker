@@ -15,7 +15,7 @@ djangorestframework-simplejwt = "==4.4.0"
 djoser = "==2.0.3"
 psycopg2 = "==2.8.2"
 psycopg2-binary = "==2.8.5"
-Django = "==2.2.13"
+Django = "==2.2.18"
 Pillow = "==6.2.0"
 
 [requires]
